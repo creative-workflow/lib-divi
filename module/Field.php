@@ -30,6 +30,11 @@ class Field{
     return $this->type('text', $default);
   }
 
+  public function typeTextarea($default=''){
+    $this->whitelist();
+    return $this->type('textarea', $default);
+  }
+
   public function typeSwitch($default='off'){
     $this->whitelist();
 
@@ -51,6 +56,7 @@ class Field{
     return $this->type('skip');
   }
 
+  // attention works because of divi internal only one time per module -> douplicate ids
   public function typeHtml(){
     $this->module->beforeRender(function($module, &$variables){
       $variables[$this->id] = $module->shortcode_content;
