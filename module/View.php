@@ -33,6 +33,7 @@ class View{
     ob_start();
 
       extract($variables);
+      $html = \cw\php\view\Html::getInstance();
       include $view;
 
     return ob_get_clean();
