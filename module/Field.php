@@ -32,7 +32,13 @@ class Field{
 
   public function typeSwitch($default='off'){
     $this->whitelist();
-    return $this->type('yes_no_button', $default);
+
+    $this->type('yes_no_button', $default);
+
+    return $this->getOrSet('options', [
+      'off' => esc_html__( 'No', 'et_builder' ),
+      'on'  => esc_html__( 'Yes', 'et_builder' ),
+    ]);
   }
 
   public function typeSelect($options, $default=null){
@@ -49,7 +55,7 @@ class Field{
     $this->module->beforeRender(function($module, &$variables){
       $variables[$this->id] = $module->shortcode_content;
     });
-    
+
     return $this->type('tiny_mce');
   }
 
