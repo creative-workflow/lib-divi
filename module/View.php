@@ -44,11 +44,7 @@ class View{
     if(!isset($data) || !is_array($data) || empty($data))
       return '';
 
-    $tmp = array_map(function($key, $value){
-      return 'data-'.$key.'="'.$value.'"';
-    }, array_keys($data),$data);
-
-    return implode(' ', $tmp);
+    return \cw\php\view\html\encoder\Attributes::encodeDataArray($data);
   }
 
   public function getCssClasses(){
