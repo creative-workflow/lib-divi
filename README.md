@@ -8,6 +8,10 @@ git submodule add https://github.com/creative-workflow/lib-divi.git ./wordpress/
 git submodule add https://github.com/creative-workflow/lib-wp.git ./wordpress/wp-content/themes/child/lib/cw/wp
 git submodule add https://github.com/creative-workflow/lib-php.git ./wordpress/wp-content/themes/child/lib/cw/php
 git submodule add https://github.com/creative-workflow/lib-sass.git ./wordpress/wp-content/themes/child/lib/cw/sass
+
+git submodule init && git submodule update
+
+git submodule foreach git checkout master
 ```
 
 ### Helper
