@@ -5,7 +5,7 @@ Make Divi module development smart for developers. See module implemenatation he
 ### Setup
 ```
 git submodule add https://github.com/creative-workflow/lib-divi.git ./wordpress/wp-content/themes/child/lib/cw/divi
-git submodule add https://github.com/creative-workflow/lib-wp.git ./wordpress/wp-content/themes/child/lib/cw/wp
+git submodule add https://github.com/creative-workflow/lib-wordpress.git ./wordpress/wp-content/themes/child/lib/cw/wp
 git submodule add https://github.com/creative-workflow/lib-php.git ./wordpress/wp-content/themes/child/lib/cw/php
 git submodule add https://github.com/creative-workflow/lib-sass.git ./wordpress/wp-content/themes/child/lib/cw/sass
 
