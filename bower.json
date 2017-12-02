@@ -1,0 +1,23 @@
+{
+  "name": "creative-workflow.divi",
+  "homepage": "https://github.com/creative-workflow/lib-divi",
+  "authors": [
+    "Tom Hanoldt <tom@creative-workflow.berlin>"
+  ],
+  "description": "wordpress divi helper library",
+  "main": "",
+  "keywords": [
+    "creative-workflow",
+    "divi",
+    "lib-divi",
+    "wordpress"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

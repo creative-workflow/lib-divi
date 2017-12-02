@@ -4,6 +4,21 @@ Make Divi module development smart for developers. See module implemenatation he
 
 ### Setup
 ```
+bower install --save creative-workflow.sass
+bower install --save creative-workflow.php
+bower install --save creative-workflow.wordpress
+bower install --save creative-workflow.divi
+
+or
+
+composer require creative-workflow/sass
+composer require creative-workflow/php
+composer require creative-workflow/wordpress
+composer require creative-workflow/divi
+
+or
+
+
 git submodule add https://github.com/creative-workflow/lib-divi.git ./wordpress/wp-content/themes/child/lib/cw/divi
 git submodule add https://github.com/creative-workflow/lib-wordpress.git ./wordpress/wp-content/themes/child/lib/cw/wp
 git submodule add https://github.com/creative-workflow/lib-php.git ./wordpress/wp-content/themes/child/lib/cw/php

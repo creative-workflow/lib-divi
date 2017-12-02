@@ -1,0 +1,24 @@
+{
+    "name": "creative-workflow/divi",
+    "type": "library",
+    "homepage": "https://github.com/creative-workflow/lib-divi",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tom Hanoldt",
+            "email": "tom@creative-workflow.berlin",
+            "homepage": "https://www.tomhanoldt.info",
+            "role": "Developer"
+        }
+    ],
+    "keywords": [
+      "creative-workflow",
+      "divi",
+      "lib-divi",
+      "wordpress"
+    ],
+    "description": "wordpress divi helper library",
+    "autoload" : {
+      "psr-0" : {"./" : ""}
+    }
+}
