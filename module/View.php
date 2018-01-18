@@ -44,6 +44,8 @@ class View{
     if(!isset($data) || !is_array($data) || empty($data))
       return '';
 
+    unset($this->variables['data']);
+
     return \cw\php\view\html\encoder\Attributes::encodeDataArray($data);
   }
 
