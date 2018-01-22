@@ -3,10 +3,11 @@
 namespace cw\divi\module;
 
 class Extension extends \ET_Builder_Module {
-  protected $groups = [];
-  protected $view   = null;
-  protected $uri    = null;
-  public    $path   = null;
+  protected $groups     = [];
+  protected $view       = null;
+  protected $uri        = null;
+  protected $attributes = null;
+  public    $path       = null;
   protected $beforeRenderCallback;
 
   public function __construct($path = null){
@@ -70,6 +71,23 @@ class Extension extends \ET_Builder_Module {
       return false;
 
     return true;
+  }
+
+  public function instanceAttributes($onOffToBool = true){
+    if($this->attributes !== null)
+      return $this->attributes;
+
+    $this->attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
+
+    if($onOffToBool){
+      foreach($this->attributes as $key => &$value){
+        if($value == 'on') $value = true;
+
+        if($value == 'off') $value = false;
+      };
+    }
+
+    return $this->attributes;
   }
 
   protected function moduleDisplayName(){
