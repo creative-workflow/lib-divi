@@ -35,6 +35,11 @@ class Field{
     return $this->type('textarea', $default);
   }
 
+  public function typeDatePicker(){
+    $this->whitelist();
+    return $this->type('date_picker');
+  }
+
   public function typeSwitch($default='off'){
     $this->whitelist();
 
@@ -43,6 +48,18 @@ class Field{
     return $this->getOrSet('options', [
       'off' => esc_html__( 'No', 'et_builder' ),
       'on'  => esc_html__( 'Yes', 'et_builder' ),
+    ]);
+  }
+
+  public function typeRange($min=1, $max=100, $step=1, $unit='%'){
+    $this->whitelist();
+    $this->type('range', $default);
+
+    return $this->getOrSet('range_settings', [
+      'min'  => $min,
+      'max'  => $max,
+      'step' => $step,
+      'fixed_unit' => $unit
     ]);
   }
 
