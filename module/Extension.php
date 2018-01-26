@@ -74,20 +74,17 @@ class Extension extends \ET_Builder_Module {
   }
 
   public function instanceAttributes($onOffToBool = true){
-    if($this->attributes !== null)
-      return $this->attributes;
-
-    $this->attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
+    $attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
 
     if($onOffToBool){
-      foreach($this->attributes as $key => &$value){
+      foreach($attributes as $key => &$value){
         if($value == 'on') $value = true;
 
         if($value == 'off') $value = false;
       };
     }
 
-    return $this->attributes;
+    return $attributes;
   }
 
   protected function moduleDisplayName(){
