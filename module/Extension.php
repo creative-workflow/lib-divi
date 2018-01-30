@@ -78,12 +78,10 @@ class Extension extends \ET_Builder_Module {
 
     if($onOffToBool){
       foreach($attributes as $key => &$value){
-        if($value == 'on') $value = true;
-
-        if($value == 'off') $value = false;
+        if($value === 'on') $value = true;
+        if($value === 'off') $value = false;
       };
     }
-
     return $attributes;
   }
 
