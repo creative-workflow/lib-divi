@@ -9,6 +9,7 @@ class Extension extends \ET_Builder_Module {
   protected $attributes = null;
   public    $path       = null;
   protected $beforeRenderCallback;
+  protected $beforeInstanceAttributesCallback;
 
   public function __construct($path = null){
     parent::__construct();
@@ -32,13 +33,14 @@ class Extension extends \ET_Builder_Module {
     ],
   ];
 
-  public function init($mainCssClass, $diviModuleSlug) {
+  public function init($mainCssClass, $diviModuleSlug, $fullWidth = false) {
     $this->main_css_class   = $mainCssClass;
     $this->main_css_element = '%%order_class%%.'.$mainCssClass;
     $this->slug             = 'et_pb_'.$diviModuleSlug;
     $this->name             = $this->moduleDisplayName();
 
     $this->fb_support       = true;
+    $this->fullwidth        = $fullWidth;
 
 
     return $this;
@@ -74,6 +76,11 @@ class Extension extends \ET_Builder_Module {
   }
 
   public function instanceAttributes($onOffToBool = true){
+    if($this->beforeInstanceAttributesCallback){
+      call_user_func_array($this->beforeInstanceAttributesCallback,
+                           [$this, &$this->shortcode_atts]);
+    }
+
     $attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
 
     if($onOffToBool){
@@ -194,6 +201,10 @@ class Extension extends \ET_Builder_Module {
 
   public function beforeRender($callback){
     $this->beforeRenderCallback = $callback;
+  }
+
+  public function beforeInstanceAttributes($callback){
+    $this->beforeInstanceAttributesCallback = $callback;
   }
 
   public function render($view, $variables=[]){

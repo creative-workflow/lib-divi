@@ -75,7 +75,7 @@ class Field{
 
   // attention works because of divi internal only one time per module -> douplicate ids
   public function typeHtml(){
-    $this->module->beforeRender(function($module, &$variables){
+    $this->module->beforeInstanceAttributes(function($module, &$variables){
       $variables[$this->id] = $module->shortcode_content;
     });
 
