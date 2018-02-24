@@ -8,8 +8,9 @@ class Extension extends \ET_Builder_Module {
   protected $uri        = null;
   protected $attributes = null;
   public    $path       = null;
-  protected $beforeRenderCallback;
-  protected $beforeInstanceAttributesCallback;
+  protected $beforeRenderCallback = [];
+  protected $beforeInstanceAttributesCallback = [];
+  protected $beforeShortcodeCallback = [];
 
   public function __construct($path = null){
     parent::__construct();
@@ -42,7 +43,6 @@ class Extension extends \ET_Builder_Module {
     $this->fb_support       = true;
     $this->fullwidth        = $fullWidth;
 
-
     return $this;
   }
 
@@ -58,7 +58,7 @@ class Extension extends \ET_Builder_Module {
 
     if(file_exists($this->path . '/js/module.js'))
       \cw\wp\Assets::getInstance()->scripts()
-                                    ->add($this->slug . '-js', $this->uri . '/js/module.js');
+                                    ->add($this->slug . '-js', $this->uri . '/js/module.js', ['jquery']);
   }
 
   public function isModuleInPost($postForTest = null){
@@ -76,9 +76,9 @@ class Extension extends \ET_Builder_Module {
   }
 
   public function instanceAttributes($onOffToBool = true){
-    if($this->beforeInstanceAttributesCallback){
-      call_user_func_array($this->beforeInstanceAttributesCallback,
-                           [$this, &$this->shortcode_atts]);
+    if(count($this->beforeInstanceAttributesCallback)){
+      foreach($this->beforeInstanceAttributesCallback as $callback)
+        call_user_func_array($callback, [$this, &$this->shortcode_atts]);
     }
 
     $attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
@@ -199,18 +199,56 @@ class Extension extends \ET_Builder_Module {
     return $fields;
   }
 
+  public function addAnimationSettings(){
+    $this->options_toggles['custom_css']['toggles']['animation'] = [
+      'title'    => 'Animation',
+      'priority' => 90
+    ];
+
+
+    // add needed class for animation ...divi bullshit
+    // $this->beforeShortcodeCallback(function(&$atts, $content, $function_name){
+    //   if(in_array( $this->shortcode_atts['animation_style'], ['', 'none'] ))
+    //     return ;
+    //
+    //   if(empty($this->shortcode_atts['module_class']))
+    //     $this->shortcode_atts['module_class'] = '';
+    //
+    //   $this->shortcode_atts['module_class'].=' et-waypoint';
+    // });
+
+    return $this;
+  }
+
+  public function shortcode_callback( $atts, $content = null, $function_name ) {
+    $module_class            = $this->shortcode_atts['module_class'];
+    $module_class            = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
+    $this->shortcode_atts['module_class'] = $module_class;
+
+    if(count($this->beforeShortcodeCallback)){
+      foreach($this->beforeShortcodeCallback as $callback)
+        call_user_func_array($callback, [&$this->shortcode_atts, &$content, &$function_name]);
+    }
+  }
+
+  public function beforeShortcodeCallback($callback){
+    $this->beforeShortcodeCallback[] = $callback;
+  }
+
   public function beforeRender($callback){
-    $this->beforeRenderCallback = $callback;
+    $this->beforeRenderCallback[] = $callback;
   }
 
   public function beforeInstanceAttributes($callback){
-    $this->beforeInstanceAttributesCallback = $callback;
+    $this->beforeInstanceAttributesCallback[] = $callback;
   }
 
   public function render($view, $variables=[]){
-    if($this->beforeRenderCallback){
-      call_user_func_array($this->beforeRenderCallback, [$this, &$variables]);
+    if(count($this->beforeRenderCallback)){
+      foreach($this->beforeRenderCallback as $callback)
+        call_user_func_array($callback, [$this, &$variables]);
     }
+
     return $this->getView()->renderModule($view, $variables);
   }
 

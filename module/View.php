@@ -50,26 +50,13 @@ class View{
   }
 
   public function getCssClasses(){
-    $classes = [$this->parent->main_css_class];
+    $classes  = [$this->parent->main_css_class];
+    $classes[]= $this->parent->shortcode_atts['module_class'];
 
     if(isset($this->variables['classes']))
       $classes = array_merge($classes, $this->variables['classes']);
 
-    if($this->getModuleClassIfPresent())
-      $classes[] = $this->getModuleClassIfPresent();
-
     return $classes;
-  }
-
-  public function getModuleClassIfPresent(){
-    if(!isset($this->variables['module_class']))
-      return '';
-
-    $module_class = $this->variables['module_class'];
-    $module_class = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
-    $module_class = $module_class ? sprintf( ' %1$s', esc_attr( ltrim( $module_class ) ) ) : '';
-
-    return $module_class;
   }
 
   public function getModuleIdWithAttributeIfPresent(){
