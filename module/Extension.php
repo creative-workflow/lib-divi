@@ -231,6 +231,9 @@ class Extension extends \ET_Builder_Module {
       foreach($this->beforeShortcodeCallback as $callback)
         call_user_func_array($callback, [&$this->shortcode_atts, &$content, &$function_name]);
     }
+
+    if(method_exists($this, 'callback'))
+      return $this->callback($atts, $content, $function_name);
   }
 
   public function beforeShortcodeCallback($callback){
