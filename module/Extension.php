@@ -151,6 +151,8 @@ class Extension extends \ET_Builder_Module {
           ->configurationOption()
           ->optionClass('et_pb_custom_css_regular');
 
+    $this->addAnimationSettings();
+
     return $this;
   }
 
