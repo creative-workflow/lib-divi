@@ -248,7 +248,7 @@ class Extension extends \ET_Builder_Module {
     $this->beforeInstanceAttributesCallback[] = $callback;
   }
 
-  public function render($view, $variables=[]){
+  public function renderModule($view, $variables=[]){
     if(count($this->beforeRenderCallback)){
       foreach($this->beforeRenderCallback as $callback)
         call_user_func_array($callback, [$this, &$variables]);
