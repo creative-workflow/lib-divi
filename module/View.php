@@ -14,7 +14,6 @@ class View{
 
   public function renderModule($view, $variables=[]){
     $this->variables = $variables;
-
     return $this->_render(
       CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php',[
         'module_view_file' => $view,
@@ -32,16 +31,22 @@ class View{
   public function _render($view, $variables=[]){
     ob_start();
 
-      extract($variables);
+      if(is_array($variables))
+        extract($variables);
+
       $html = \cw\php\view\Html::getInstance();
+
       include $view;
 
     return ob_get_clean();
   }
 
   public function renderData(){
+    if(!isset($this->variables['data']))
+      return '';
+
     $data = $this->variables['data'];
-    if(!isset($data) || !is_array($data) || empty($data))
+    if(!is_array($data) || empty($data))
       return '';
 
     unset($this->variables['data']);
