@@ -76,7 +76,7 @@ class Field{
   // attention works because of divi internal only one time per module -> douplicate ids
   public function typeHtml(){
     $this->module->beforeInstanceAttributes(function($module, &$variables){
-      $variables[$this->id] = $module->shortcode_content;
+      $variables[$this->id] = $module->content;
     });
 
     return $this->type('tiny_mce');
@@ -129,13 +129,13 @@ class Field{
     if($name === null)
       $name = $this->getOrSet('label');
 
-    if(!is_array($this->module->advanced_options))
-      $this->module->advanced_options = [];
+    if(!is_array($this->module->advanced_fields))
+      $this->module->advanced_fields = [];
 
-    if(!is_array($this->module->advanced_options['fonts']))
-      $this->module->advanced_options['fonts'] = [];
+    if(!is_array($this->module->advanced_fields['fonts']))
+      $this->module->advanced_fields['fonts'] = [];
 
-    $this->module->advanced_options['fonts'][$this->id] = [
+    $this->module->advanced_fields['fonts'][$this->id] = [
       'label'    => $name . ' Text',
       'css'      => [
         'main' => "{$this->main_css_element} {$cssElement}",

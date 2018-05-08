@@ -40,7 +40,7 @@ class Extension extends \ET_Builder_Module {
     $this->slug             = 'et_pb_'.$diviModuleSlug;
     $this->name             = $this->moduleDisplayName();
 
-    $this->fb_support       = true;
+    $this->vb_support       = true;
     $this->fullwidth        = $fullWidth;
 
     return $this;
@@ -78,10 +78,10 @@ class Extension extends \ET_Builder_Module {
   public function instanceAttributes($onOffToBool = true){
     if(count($this->beforeInstanceAttributesCallback)){
       foreach($this->beforeInstanceAttributesCallback as $callback)
-        call_user_func_array($callback, [$this, &$this->shortcode_atts]);
+        call_user_func_array($callback, [$this, &$this->props]);
     }
 
-    $attributes = new \cw\php\core\ArrayAsObject($this->shortcode_atts);
+    $attributes = new \cw\php\core\ArrayAsObject($this->props);
 
     if($onOffToBool){
       foreach($attributes as $key => &$value){
@@ -157,7 +157,7 @@ class Extension extends \ET_Builder_Module {
   }
 
   public function addDefaultAdvancedOptions(){
-    $this->advanced_options = array(
+    $this->advanced_fields = array(
       'fonts' => array(
         'text'   => array(
           'label'    => esc_html__( 'Text', 'et_builder' ),
@@ -202,7 +202,7 @@ class Extension extends \ET_Builder_Module {
   }
 
   public function addAnimationSettings(){
-    $this->options_toggles['custom_css']['toggles']['animation'] = [
+    $this->settings_modal_toggles['custom_css']['toggles']['animation'] = [
       'title'    => 'Animation',
       'priority' => 90
     ];
@@ -210,26 +210,26 @@ class Extension extends \ET_Builder_Module {
 
     // add needed class for animation ...divi bullshit
     // $this->beforeShortcodeCallback(function(&$atts, $content, $function_name){
-    //   if(in_array( $this->shortcode_atts['animation_style'], ['', 'none'] ))
+    //   if(in_array( $this->props['animation_style'], ['', 'none'] ))
     //     return ;
     //
-    //   if(empty($this->shortcode_atts['module_class']))
-    //     $this->shortcode_atts['module_class'] = '';
+    //   if(empty($this->props['module_class']))
+    //     $this->props['module_class'] = '';
     //
-    //   $this->shortcode_atts['module_class'].=' et-waypoint';
+    //   $this->props['module_class'].=' et-waypoint';
     // });
 
     return $this;
   }
 
   public function shortcode_callback( $atts, $content = null, $function_name ) {
-    $module_class            = $this->shortcode_atts['module_class'];
+    $module_class            = $this->props['module_class'];
     $module_class            = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
-    $this->shortcode_atts['module_class'] = $module_class;
+    $this->props['module_class'] = $module_class;
 
     if(count($this->beforeShortcodeCallback)){
       foreach($this->beforeShortcodeCallback as $callback)
-        call_user_func_array($callback, [&$this->shortcode_atts, &$content, &$function_name]);
+        call_user_func_array($callback, [&$this->props, &$content, &$function_name]);
     }
 
     if(method_exists($this, 'callback'))

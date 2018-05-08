@@ -44,7 +44,7 @@ class FieldGroup{
 
   protected function publishToggles(){
     foreach($this->fields as $field)
-      $this->module->options_toggles[$this->tab]['toggles'][$this->id] = [
+      $this->module->settings_modal_toggles[$this->tab]['toggles'][$this->id] = [
         'title'    => $this->name,
         'priority' => $this->priority
       ];

@@ -56,7 +56,7 @@ class View{
 
   public function getCssClasses(){
     $classes  = [$this->parent->main_css_class];
-    $classes[]= $this->parent->shortcode_atts['module_class'];
+    $classes[]= $this->parent->props['module_class'];
 
     if(isset($this->variables['classes']))
       $classes = array_merge($classes, $this->variables['classes']);

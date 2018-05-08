@@ -18,7 +18,6 @@ composer require creative-workflow/divi
 
 or
 
-
 git submodule add https://github.com/creative-workflow/lib-divi.git ./wordpress/wp-content/themes/child/lib/cw/divi
 git submodule add https://github.com/creative-workflow/lib-wordpress.git ./wordpress/wp-content/themes/child/lib/cw/wp
 git submodule add https://github.com/creative-workflow/lib-php.git ./wordpress/wp-content/themes/child/lib/cw/php
@@ -53,7 +52,7 @@ cw\divi\module\Helper::register(
 
 class ModuleHalloWorld extends cw\divi\module\Extension {
   public function init() {
-    parent::init('cw-module-hallo-world', 'custom_hallo_world');
+    parent::init('custom-hello-world', 'custom_hello_world');
 
     $this->addDefaultFields();
 
@@ -93,11 +92,11 @@ class ModuleHalloWorld extends cw\divi\module\Extension {
       return $this;
   }
 
-  public function shortcode_callback( $atts, $content = null, $function_name ) {
-    $variables = $this->shortcode_atts;
-    $variables['text'] = $this->shortcode_content;
+  public function callback( $atts, $content = null, $function_name ) {
+    $variables = $this->props;
+    $variables['text'] = $this->content;
 
-    return $this->render(
+    return $this->renderModule(
       'views/module.php',
       $variables
     );
