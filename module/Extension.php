@@ -75,6 +75,13 @@ class Extension extends \ET_Builder_Module {
     return true;
   }
 
+  public function rawInstanceAttributes($name, $default = null){
+    if(!isset($this->props[$name]))
+      return $default;
+
+    return $this->props[$name];
+  }
+
   public function instanceAttributes($onOffToBool = true){
     if(count($this->beforeInstanceAttributesCallback)){
       foreach($this->beforeInstanceAttributesCallback as $callback)
