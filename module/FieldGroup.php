@@ -63,4 +63,8 @@ class FieldGroup{
   public function tabCustomCss(){
     return $this->updateTab('custom_css');
   }
+
+  public function tab($name){
+    return $this->updateTab($name);
+  }
 }

@@ -31,7 +31,7 @@ class Extension extends \ET_Builder_Module {
     ],
     'custom_css' => [
       'toggles' => []
-    ],
+    ]
   ];
 
   public function init($mainCssClass, $diviModuleSlug, $fullWidth = false) {
