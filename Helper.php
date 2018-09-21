@@ -10,6 +10,12 @@ class Helper{
     });
   }
 
+  public static function setEditorAsDefault(){
+    add_action('load-post-new.php', function(){
+      add_filter('et_builder_always_enabled', '__return_true');
+    });
+  }
+
   public static function enableEditorForCustomPostTypes(){
     /* Enable Divi Builder on all post types with an editor box */
     add_filter('et_builder_post_types', function($post_types) {
