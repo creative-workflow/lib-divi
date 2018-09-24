@@ -14,9 +14,14 @@ class View{
 
   public function renderModule($view, $variables=[]){
     $this->variables = $variables;
+
+    $tmp      = explode('/', $view);
+    $template = array_pop($tmp);
+    $this->basePath = $this->parent->path . '/' . implode('/', $tmp);
+
     return $this->_render(
       CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php',[
-        'module_view_file' => $view,
+        'module_view_file' => $template,
         'view_attributes'  => $variables,
         'data'             => $this->renderData(),
         'module_id'        => $this->getModuleIdWithAttributeIfPresent(),
@@ -25,7 +30,7 @@ class View{
   }
 
   public function render($view, $variables=[]){
-    return $this->_render($this->parent->path . '/' . $view, $variables);
+    return $this->_render($this->basePath . '/' . $view, $variables);
   }
 
   public function _render($view, $variables=[]){
