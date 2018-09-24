@@ -8,14 +8,17 @@ class Extension extends \ET_Builder_Module {
   protected $uri        = null;
   protected $attributes = null;
   public    $path       = null;
+  public    $assets     = null;
   protected $beforeRenderCallback = [];
   protected $beforeInstanceAttributesCallback = [];
   protected $beforeShortcodeCallback = [];
+
 
   public function __construct($path = null){
     parent::__construct();
     $this->path = $path;
     $this->uri  = '/modules/' . $this->moduleFolderName();
+    $this->assets = \cw\wp\Assets::getInstance();
     $this->enqueueShortcodeAssets();
   }
 
@@ -46,23 +49,22 @@ class Extension extends \ET_Builder_Module {
     return $this;
   }
 
-  public function enqueueShortcodeAssets(){
-    global $post;
-
+  // this is only here for compat
+  protected function enqueueShortcodeAssets(){
     if(!$this->isModuleInPost())
       return ;
 
     if(file_exists($this->path . '/css/module.css'))
-      \cw\wp\Assets::getInstance()->styles()
-                                    ->add($this->slug . '-css', $this->uri . '/css/module.css');
+      $this->assets->styles()
+                   ->add($this->slug . '-css', $this->uri . '/css/module.css');
 
     if(file_exists($this->path . '/js/module.js'))
-      \cw\wp\Assets::getInstance()->scripts()
-                                    ->add($this->slug . '-js', $this->uri . '/js/module.js', ['jquery']);
+      $this->assets->scripts()
+                   ->add($this->slug . '-js', $this->uri . '/js/module.js', ['jquery']);
   }
 
   public function isModuleInPost($postForTest = null){
-    if($post === null){
+    if($postForTest === null){
       global $post;
       $postForTest = $post;
     }
@@ -213,18 +215,6 @@ class Extension extends \ET_Builder_Module {
       'title'    => 'Animation',
       'priority' => 90
     ];
-
-
-    // add needed class for animation ...divi bullshit
-    // $this->beforeShortcodeCallback(function(&$atts, $content, $function_name){
-    //   if(in_array( $this->props['animation_style'], ['', 'none'] ))
-    //     return ;
-    //
-    //   if(empty($this->props['module_class']))
-    //     $this->props['module_class'] = '';
-    //
-    //   $this->props['module_class'].=' et-waypoint';
-    // });
 
     return $this;
   }
