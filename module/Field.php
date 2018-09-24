@@ -154,7 +154,7 @@ class Field{
 
   protected function getOrSet($key, $value=null, $default=''){
     if($value === null)
-      return $this->config[$key];
+      return (isset($this->config[$key])) ? $this->config[$key] : null;
 
     if($default !== null)
       $this->defaultValue($default);
