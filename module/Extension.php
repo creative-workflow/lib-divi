@@ -70,7 +70,6 @@ class Extension extends \ET_Builder_Module {
     }
 
     if(!isset($postForTest->post_content)
-    || !is_singular()
     || !has_shortcode($postForTest->post_content, $this->slug))
       return false;
 
