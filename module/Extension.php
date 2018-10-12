@@ -107,7 +107,8 @@ class Extension extends \ET_Builder_Module {
   }
 
   protected function moduleFolderName(){
-    return array_pop(explode('/', $this->path));
+    $tmp = explode('/', $this->path);
+    return array_pop($tmp);
   }
 
   protected function addGroup($id, $name=null){

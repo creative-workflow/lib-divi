@@ -137,13 +137,13 @@ class Field{
     if(!is_array($this->module->advanced_fields))
       $this->module->advanced_fields = [];
 
-    if(!is_array($this->module->advanced_fields['fonts']))
+    if(!isset($this->module->advanced_fields['fonts']))
       $this->module->advanced_fields['fonts'] = [];
 
     $this->module->advanced_fields['fonts'][$this->id] = [
       'label'    => $name . ' Text',
       'css'      => [
-        'main' => "{$this->main_css_element} {$cssElement}",
+        'main' => "{$this->module->main_css_element} {$cssElement}",
         // 'line_height' => "{$this->main_css_element} p",
         // 'color' => "{$this->main_css_element}.et_pb_text",
       ],
