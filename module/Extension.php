@@ -37,6 +37,31 @@ class Extension extends \ET_Builder_Module {
     ]
   ];
 
+  protected function _add_link_options_fields(){
+  }
+  protected function _add_background_fields(){
+  }
+  protected function _add_font_fields(){
+  }
+  protected function _add_text_fields(){
+  }
+  protected function _add_borders_fields(){
+  }
+  protected function _add_max_width_fields(){
+  }
+  protected function _add_margin_padding_fields(){
+  }
+  protected function _add_animation_fields(){
+  }
+  protected function _add_additional_transition_fields(){
+  }
+  protected function _add_filter_fields(){
+  }
+  protected function _add_text_shadow_fields(){
+  }
+  protected function _add_box_shadow_fields(){
+  }
+
   public function init($mainCssClass, $diviModuleSlug, $fullWidth = false) {
     $this->main_css_class   = $mainCssClass;
     $this->main_css_element = '%%order_class%%.'.$mainCssClass;
