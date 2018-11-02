@@ -281,7 +281,8 @@ class Extension extends \ET_Builder_Module {
 
   public function getView(){
     if($this->view === null)
-      $this->view = new \cw\divi\module\View($this);
+      $this->view = new \cw\divi\module\View($this,
+        CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php');
 
     return $this->view;
   }

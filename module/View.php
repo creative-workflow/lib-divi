@@ -7,20 +7,22 @@ class View{
 
   protected $variables = [];
   protected $parent;
+  protected $moduleWrapper = null;
 
-  public function __construct(\cw\divi\module\Extension $parent){
-    $this->parent = $parent;
+  public function __construct(\cw\divi\module\Extension $parent, $moduleWrapper = null){
+    $this->parent        = $parent;
+    $this->moduleWrapper = $moduleWrapper;
   }
 
   public function renderModule($view, $variables=[]){
     $this->variables = $variables;
 
-    $tmp      = explode('/', $view);
-    $template = array_pop($tmp);
+    $tmp            = explode('/', $view);
+    $template       = array_pop($tmp);
     $this->basePath = $this->parent->path . '/' . implode('/', $tmp);
 
     return $this->_render(
-      CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php',[
+      $this->moduleWrapper,[
         'module_view_file' => $template,
         'view_attributes'  => $variables,
         'data'             => $this->renderData(),
