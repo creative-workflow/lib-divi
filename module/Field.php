@@ -87,6 +87,11 @@ class Field{
     return $this->getOrSet('options', $options);
   }
 
+  public function typeColor($default=''){
+    $this->type('color-alpha', $default);
+    return $this->getOrSet('options', $options);
+  }
+
   public function basicOption(){
     return $this->getOrSet('option_category', 'basic_option');
   }
@@ -130,24 +135,14 @@ class Field{
     return $this;
   }
 
-  public function addFontSettings($cssElement, $name = null){
+  public function addFontSettings($cssElement, $name = null, $id = null){
     if($name === null)
       $name = $this->getOrSet('label');
 
-    if(!is_array($this->module->advanced_fields))
-      $this->module->advanced_fields = [];
+    if($id === null)
+      $id = $this->id;
 
-    if(!isset($this->module->advanced_fields['fonts']))
-      $this->module->advanced_fields['fonts'] = [];
-
-    $this->module->advanced_fields['fonts'][$this->id] = [
-      'label'    => $name . ' Text',
-      'css'      => [
-        'main' => "{$this->module->main_css_element} {$cssElement}",
-        // 'line_height' => "{$this->main_css_element} p",
-        // 'color' => "{$this->main_css_element}.et_pb_text",
-      ],
-    ];
+    $this->module->addFontSettings($cssElement, $name, $id);
 
     return $this;
   }

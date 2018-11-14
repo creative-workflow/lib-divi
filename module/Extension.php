@@ -12,7 +12,7 @@ class Extension extends \ET_Builder_Module {
   protected $beforeRenderCallback = [];
   protected $beforeInstanceAttributesCallback = [];
   protected $beforeShortcodeCallback = [];
-
+  public static $css = '';
 
   public function __construct($path = null){
     parent::__construct();
@@ -273,5 +273,28 @@ class Extension extends \ET_Builder_Module {
         CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php');
 
     return $this->view;
+  }
+
+
+  public function addFontSettings($cssElement, $name, $id){
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    if(!isset($this->advanced_fields['fonts']))
+      $this->advanced_fields['fonts'] = [];
+
+    $this->advanced_fields['fonts'][$id] = [
+      'label'    => $name,
+      'css'      => [
+        'main' => "{$this->main_css_element} {$cssElement}",
+        // 'plugin_main' => "{$this->main_css_element} {$cssElement}",
+        // 'line_height' => "{$this->main_css_element} {$cssElement}",
+      ],
+    ];
+
+    // echo '<pre>';
+    // var_dump($this->module->advanced_fields); die();
+
+    return $this;
   }
 }
