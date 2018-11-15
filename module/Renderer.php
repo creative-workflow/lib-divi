@@ -98,4 +98,25 @@ class Renderer{
 
     return $result;
   }
+
+  public static function renderCustomCssFields($order_class, $custom_css, $atts, $content, $function_name){
+    if(!isset($custom_css))
+      return;
+
+    $result = '';
+    // echo '<pre>'; var_dump($custom_css);
+    // echo "\n\n\n!!!!";
+    // var_dump($atts); #die();
+    $order_class = '.'.trim(\ET_Builder_Element::add_module_order_class($order_class, $function_name ));
+
+    foreach($custom_css as $slug => $options){
+      if(!isset($atts['custom_css_'.$slug]))
+        continue;
+
+      $value = $atts['custom_css_'.$slug];
+      $result.=' '.$order_class.$options['selector'].'{'.$value.'} ';
+    }
+
+    return $result;
+  }
 }

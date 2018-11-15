@@ -232,6 +232,34 @@ class Extension extends \ET_Builder_Module {
     return $this;
   }
 
+  public function addCustomCss($label, $slug, $selector, $addHover = true, $spaceBeforeSelector = true){
+    if($spaceBeforeSelector)
+      $selector = ' '.$selector;
+
+    $this->custom_css_fields[$slug] = [
+      'label'    => $label,
+      'selector' => $selector,
+      'no_space_before_selector' => false,
+      'tab_slug'        => 'custom_css',
+      'toggle_slug'     => 'custom_css',
+      'sub_toggle'      => 'column_%s',
+      'hover'           => 'tabs'
+    ];
+
+    if($addHover){
+      $this->custom_css_fields[$slug.'_hover'] = [
+        'label'    => $label.' (hover)',
+        'selector' => $selector.':hover',
+        'no_space_before_selector' => false,
+        'tab_slug'        => 'custom_css',
+        'toggle_slug'     => 'custom_css',
+        'sub_toggle'      => 'column_%s',
+        'hover'           => 'tabs'
+      ];
+    }
+    return $this;
+  }
+
   public function shortcode_callback( $atts, $content = null, $function_name ) {
     $module_class            = $this->props['module_class'];
     $module_class            = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
