@@ -103,12 +103,12 @@ class Renderer{
     if(!isset($custom_css))
       return;
 
-    $result = '';
-    // echo '<pre>'; var_dump($custom_css);
-    // echo "\n\n\n!!!!";
-    // var_dump($atts); #die();
-    $order_class = '.'.trim(\ET_Builder_Element::add_module_order_class($order_class, $function_name ));
+    if($order_class !== false)
+      $order_class = '.'.trim(\ET_Builder_Element::add_module_order_class($order_class, $function_name ));
+    else
+      $order_class = '';
 
+    $result = '';
     foreach($custom_css as $slug => $options){
       if(!isset($atts['custom_css_'.$slug]))
         continue;
