@@ -15,10 +15,10 @@ class Extension extends \ET_Builder_Module {
   public static $css = '';
 
   public function __construct($path = null){
-    parent::__construct();
     $this->path = $path;
     $this->uri  = '/modules/' . $this->moduleFolderName();
     $this->assets = \cw\wp\Assets::getInstance();
+    parent::__construct();
     $this->enqueueShortcodeAssets();
   }
 
