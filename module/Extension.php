@@ -50,7 +50,10 @@ class Extension extends \ET_Builder_Module {
   protected function _add_text_shadow_fields(){}
   protected function _add_box_shadow_fields(){}
 
-  public function init($mainCssClass, $diviModuleSlug, $fullWidth = false) {
+  public function init($mainCssClass, $diviModuleSlug = null, $fullWidth = false) {
+    if($diviModuleSlug === null)
+      $diviModuleSlug = $mainCssClass;
+
     $this->main_css_class   = $mainCssClass;
     $this->main_css_element = '%%order_class%%.'.$mainCssClass;
     $this->slug             = 'et_pb_'.$diviModuleSlug;
