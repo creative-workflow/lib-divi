@@ -88,8 +88,7 @@ class Field{
   }
 
   public function typeColor($default=''){
-    $this->type('color-alpha', $default);
-    return $this->getOrSet('options', $options);
+    return $this->type('color-alpha', $default);
   }
 
   public function basicOption(){
