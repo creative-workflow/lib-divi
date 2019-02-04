@@ -51,9 +51,10 @@ class Field{
     ]);
   }
 
-  public function typeRange($min=1, $max=100, $step=1, $unit='%'){
+  public function typeRange($min=1, $max=100, $step=1, $unit='%', $default=0){
     $this->whitelist();
     $this->type('range', $default);
+    $this->getOrSet('default', $default);
 
     return $this->getOrSet('range_settings', [
       'min'  => $min,
