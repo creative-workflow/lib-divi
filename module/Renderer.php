@@ -13,6 +13,15 @@ class Renderer{
     if(isset($advanced_fields['fonts']))
       $result.=self::renderCustomFonts($advanced_fields, $atts, $content, $order_class);
 
+    if(isset($advanced_fields['max_width']))
+      $result.=self::renderMaxWidth($advanced_fields, $atts, $content, $order_class);
+
+    if(isset($advanced_fields['margin_padding']))
+      $result.=self::renderMarginPadding($advanced_fields, $atts, $content, $order_class);
+
+    if(isset($advanced_fields['borders']))
+      $result.=self::renderBorders($advanced_fields, $atts, $content, $order_class);
+
     return $result;
   }
 
@@ -119,4 +128,151 @@ class Renderer{
 
     return $result;
   }
+
+  public static function renderBorders($advanced_fields, $atts, $content, $order_class){
+    // return '';
+    // echo '<pre>';
+    // var_dump($advanced_fields['borders']);
+    // echo '!!!!!!!!!!!'."\n\n\n";
+    // var_dump($atts);
+    // die('huhu');
+
+    if(!isset($advanced_fields['borders']))
+      return '';
+
+    $result = '';
+    foreach($advanced_fields['borders'] as $name => $config){
+      if($name == 'default')
+        $suffix = '';
+      else
+        $suffix = '_'.$name;
+
+      foreach($config['css'] as $option => $selector){
+        $desktop = '';
+        $selectorStyles = str_replace('%%order_class%%', '.'.trim($order_class), $selector['border_styles']);
+        $selectorRadii  = str_replace('%%order_class%%', '.'.trim($order_class), $selector['border_radii']);
+
+        $borderWidth = 'border_width_all'.$suffix;
+        $borderColor = 'border_color_all'.$suffix;
+        $borderStyle = 'border_style_all'.$suffix;
+        $borderRadii = 'border_radii'.$suffix;
+
+        $result.= self::renderBorderStyle($selectorStyles, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+        $result.= self::renderBorderRadii($selectorRadii, $atts[$borderRadii]);
+
+        foreach(['top', 'left', 'right', 'bottom'] as $partial){
+          $borderWidth = 'border_width_'.$partial.$suffix;
+          $borderColor = 'border_color_'.$partial.$suffix;
+          $borderStyle = 'border_style_'.$partial.$suffix;
+
+          $result.= self::renderBorderStyle($selectorStyles, 'border-'.$partial, $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+        }
+      }
+    }
+    return $result;
+  }
+
+  public static function renderBorderStyle($selector, $key, $width, $style, $color){
+    if(empty($width)
+    && empty($style)
+    && empty($color))
+      return '';
+
+    if(empty($style))
+      $style = "solid";
+
+    if(empty($color))
+      $color = 'inherit';
+
+    if(empty($width))
+      $width = 'inherit';
+
+    return "$selector{ $key: $width $style $color; }";
+  }
+
+  public static function renderBorderRadii($selector, $radii){
+    $tmp = explode('|', $radii);
+    array_shift($tmp);
+    $tmp = implode(' ', $tmp);
+    return "$selector{ border-radius: $tmp; }";
+  }
+
+  public static function renderMaxWidth($advanced_fields, $atts, $content, $order_class){
+    if(!isset($advanced_fields['max_width'])
+    || !isset($advanced_fields['max_width']['css']))
+      return '';
+
+    $result = $resultDesktop = $resultTablet = $resultMobile = '';
+    foreach($advanced_fields['max_width']['css'] as $option => $selector){
+      $desktop = $mobile = $tablet = '';
+      $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
+
+      $desktop.="max-width: {$atts['max_width']};";
+      if(isset($atts['max_width_tablet']))
+        $tablet.="max-width: {$atts['max_width_tablet']};";
+      if(isset($atts['max_width_phone']))
+        $mobile.="max-width: {$atts['max_width_phone']};";
+
+      if($desktop) $resultDesktop.="$selector{ $desktop }";
+      if($tablet)  $resultTablet.="$selector{ $tablet }";
+      if($mobile)  $resultMobile.="$selector{ $mobile }";
+    }
+
+    if($resultDesktop) $result.="$resultDesktop";
+    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
+
+    return $result;
+  }
+
+  public static function renderMarginPaddingSetting($input){
+    $tmp = explode('|', $input);
+    $result = '';
+    foreach($tmp as $value){
+      if(empty($value))
+        $result.='inherit ';
+      else
+        $result.=$value.' ';
+    }
+
+    return $result;
+  }
+
+  public static function renderMarginPadding($advanced_fields, $atts, $content, $order_class){
+    if(!isset($advanced_fields['margin_padding'])
+    || !isset($advanced_fields['margin_padding']['css']))
+      return '';
+
+    $result = $resultDesktop = $resultTablet = $resultMobile = '';
+    foreach($advanced_fields['margin_padding']['css'] as $option => $selector){
+      $desktop = $mobile = $tablet = '';
+      $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
+
+      if($option == 'margin'){
+        $desktop.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin']).";";
+        if(isset($atts['custom_margin_tablet']))
+          $tablet.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_tablet']).";";
+        if(isset($atts['custom_margin_phone']))
+          $mobile.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_phone']).";";
+      }
+
+      if($option == 'padding'){
+        $desktop.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding']).";";
+        if(isset($atts['custom_padding_tablet']))
+          $tablet.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_tablet']).";";
+        if(isset($atts['custom_padding_phone']))
+          $mobile.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_phone']).";";
+      }
+
+      if($desktop) $resultDesktop.="$selector{ $desktop }";
+      if($tablet)  $resultTablet.="$selector{ $tablet }";
+      if($mobile)  $resultMobile.="$selector{ $mobile }";
+    }
+    if($resultDesktop) $result.="$resultDesktop";
+    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
+
+    return $result;
+  }
+
 }
