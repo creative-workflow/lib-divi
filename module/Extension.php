@@ -41,14 +41,14 @@ class Extension extends \ET_Builder_Module {
   # protected function _add_background_fields(){}
   # protected function _add_font_fields(){}
   protected function _add_text_fields(){}
-  protected function _add_borders_fields(){}
-  protected function _add_max_width_fields(){}
-  protected function _add_margin_padding_fields(){}
-  # protected function _add_animation_fields(){}
+  # protected function _add_max_width_fields(){}
+  # protected function _add_margin_padding_fields(){}
+  protected function _add_animation_fields(){}
   protected function _add_additional_transition_fields(){}
   protected function _add_filter_fields(){}
-  protected function _add_text_shadow_fields(){}
-  protected function _add_box_shadow_fields(){}
+  # protected function _add_text_shadow_fields(){}
+  # protected function _add_box_shadow_fields(){}
+  # protected function _add_borders_fields(){}
 
   public function init($mainCssClass, $diviModuleSlug = null, $fullWidth = false) {
     if($diviModuleSlug === null)
@@ -130,6 +130,18 @@ class Extension extends \ET_Builder_Module {
   protected function addGroup($id, $name=null){
     $group = new \cw\divi\module\FieldGroup($this, $id, $name);
     $this->groups[$id] = $group;
+    return $group;
+  }
+
+  protected function addInfoGroup($headline, $content = null){
+    if($content === null){
+      $content = $headline;
+      $headline = '';
+    }
+
+    $group = new \cw\divi\module\FieldGroup($this, 'info_box', '&#8520; '.$headline.'');
+    $this->groups['info_box'] = $group;
+    $group->addField('info_box')->typeInfo($content, $cssClass='info-box');
     return $group;
   }
 
@@ -263,6 +275,102 @@ class Extension extends \ET_Builder_Module {
     return $this;
   }
 
+  public function addMaxWidth($selector='', $parentSelector = null){
+    if($parentSelector === null)
+      $parentSelector = $this->main_css_element;
+
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    $this->advanced_fields['max_width'] = [
+      'css' => [
+        'module_alignment' => "$parentSelector $selector"
+      ]
+    ];
+    return $this;
+  }
+
+  public function addMarginPadding($marginSelector, $paddingSelector = null, $parentSelector = null){
+    if($parentSelector === null)
+      $parentSelector = $this->main_css_element;
+
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    if($paddingSelector === null)
+      $paddingSelector = $marginSelector;
+
+    $this->advanced_fields['margin_padding'] = [
+      'css' => [
+        'margin' => "$parentSelector $marginSelector",
+        'padding' => "$parentSelector $paddingSelector"
+      ]
+    ];
+    return $this;
+  }
+
+  public function addBorder($slug, $label, $borderSelector, $parentSelector = null){
+    if($parentSelector === null)
+      $parentSelector = $this->main_css_element;
+
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    if(!is_array($this->advanced_fields['borders']))
+      $this->advanced_fields['borders'] = [];
+
+    $this->advanced_fields['borders'][$slug] = [
+      'label_prefix' => $label,
+      'css' => [
+        'main'  => [
+          'border_radii'  => "$parentSelector $borderSelector",
+          'border_styles' => "$parentSelector $borderSelector",
+        ]
+      ]
+    ];
+    return $this;
+  }
+
+  public function addBoxShadow($slug, $label, $selector, $parentSelector = null){
+    if($parentSelector === null)
+      $parentSelector = $this->main_css_element;
+
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    if(!isset($this->advanced_fields['box_shadow']))
+      $this->advanced_fields['box_shadow'] = [];
+
+    $this->advanced_fields['box_shadow'][$slug] = [
+      'label'    => $label,
+      'css'      => [
+        'main' => "$parentSelector $selector"
+      ],
+    ];
+    return $this;
+  }
+
+
+  public function addFontSettings($slug, $label, $cssElement, $parentSelector = null){
+    if($parentSelector === null)
+      $parentSelector = $this->main_css_element;
+
+    if(!is_array($this->advanced_fields))
+      $this->advanced_fields = [];
+
+    if(!isset($this->advanced_fields['fonts']))
+      $this->advanced_fields['fonts'] = [];
+
+    $this->advanced_fields['fonts'][$slug] = [
+      'label'    => $label,
+      'css'      => [
+        'main' => "$parentSelector $cssElement"
+      ],
+    ];
+
+    return $this;
+  }
+
   public function shortcode_callback( $atts, $content = null, $function_name ) {
     $module_class            = $this->props['module_class'];
     $module_class            = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -304,28 +412,5 @@ class Extension extends \ET_Builder_Module {
         CW_DIVI_MODULES_FOLDER . '/views/module-wrapper.php');
 
     return $this->view;
-  }
-
-
-  public function addFontSettings($cssElement, $name, $id){
-    if(!is_array($this->advanced_fields))
-      $this->advanced_fields = [];
-
-    if(!isset($this->advanced_fields['fonts']))
-      $this->advanced_fields['fonts'] = [];
-
-    $this->advanced_fields['fonts'][$id] = [
-      'label'    => $name,
-      'css'      => [
-        'main' => "{$this->main_css_element} {$cssElement}",
-        // 'plugin_main' => "{$this->main_css_element} {$cssElement}",
-        // 'line_height' => "{$this->main_css_element} {$cssElement}",
-      ],
-    ];
-
-    // echo '<pre>';
-    // var_dump($this->module->advanced_fields); die();
-
-    return $this;
   }
 }
