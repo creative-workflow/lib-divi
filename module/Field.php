@@ -16,7 +16,7 @@ class Field{
     return $this->getOrSet('label', $value);
   }
 
-  public function type($value=null, $default=''){
+  public function type($value=null, $default=null){
     return $this->getOrSet('type', $value, $default);
   }
 
@@ -25,14 +25,26 @@ class Field{
     return $this->type('upload');
   }
 
-  public function typeText($default=''){
+  public function typeText($default=null){
     $this->whitelist();
     return $this->type('text', $default);
   }
 
-  public function typeTextarea($default=''){
-    $this->whitelist();
+  public function typeTextarea($default=null, $readonly = false){
+    $this->whitelist()->getOrSet('readonly', $readonly ? 'readonly' : '');
     return $this->type('textarea', $default);
+  }
+
+  public function typeCode($default=null){
+    $this->whitelist()->getOrSet('mode', 'html');
+    return $this->type('codemirror', $default);
+  }
+
+  public function typeInfo($content, $cssClass='info-box'){
+    $this->whitelist();
+
+    return $this->typeText($content, true)
+                ->addCssClass($cssClass);
   }
 
   public function typeDatePicker(){
@@ -43,6 +55,11 @@ class Field{
   public function typeSwitch($default='off'){
     $this->whitelist();
 
+    if($default === true)
+      $default = 'on';
+    if($default === false)
+      $default = 'off';
+
     $this->type('yes_no_button', $default);
 
     return $this->getOrSet('options', [
@@ -51,10 +68,9 @@ class Field{
     ]);
   }
 
-  public function typeRange($min=1, $max=100, $step=1, $unit='%', $default=0){
+  public function typeRange($min=1, $max=100, $step=1, $unit='%', $default=null){
     $this->whitelist();
     $this->type('range', $default);
-    $this->getOrSet('default', $default);
 
     return $this->getOrSet('range_settings', [
       'min'  => $min,
@@ -74,6 +90,24 @@ class Field{
     return $this->type('skip');
   }
 
+  public function typeMultipleCheckboxes($options, $default=null){
+    $this->module->beforeInstanceAttributes(function($module, &$variables){
+      $options = $this->getOrSet('options');
+      $enabled = explode('|', $variables[$this->id]);
+      $result  = [];
+      $i = 0;
+      foreach($options as $value => $name){
+        if(!empty($enabled[$i]))
+          $result[] = $value;
+        $i++;
+      }
+      $variables[$this->id] = $result;
+    });
+    $this->whitelist();
+    $this->type('multiple_checkboxes', $default);
+    return $this->getOrSet('options', $options);
+  }
+
   // attention works because of divi internal only one time per module -> douplicate ids
   public function typeHtml(){
     $this->module->beforeInstanceAttributes(function($module, &$variables){
@@ -83,9 +117,9 @@ class Field{
     return $this->type('tiny_mce');
   }
 
-  public function typeMultipleCheckboxes($options, $default=''){
-    $this->type('multiple_checkboxes', $default);
-    return $this->getOrSet('options', $options);
+  public function showIf($input = []){
+    $this->getOrSet('show_if', $input);
+    return $this;
   }
 
   public function typeColor($default=''){
@@ -132,6 +166,7 @@ class Field{
 
   public function defaultValue($value){
     $this->module->fields_defaults[$this->id] = [$value];
+    $this->getOrSet('default', $default);
     return $this;
   }
 
@@ -147,7 +182,7 @@ class Field{
     return $this;
   }
 
-  protected function getOrSet($key, $value=null, $default=''){
+  public function getOrSet($key, $value=null, $default=null){
     if($value === null)
       return (isset($this->config[$key])) ? $this->config[$key] : null;
 
