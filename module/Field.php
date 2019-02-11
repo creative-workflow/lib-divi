@@ -126,6 +126,18 @@ class Field{
     return $this->type('color-alpha', $default);
   }
 
+  public function typeMargin($selector, $mobileOptions = true){
+    $this->getOrSet('mobile_options', $mobileOptions);
+    $this->getOrSet('custom_margin_selector', "%%order_class%% $selector");
+    return $this->type('custom_margin');
+  }
+
+  public function typePadding($selector='', $mobileOptions = true){
+    $this->getOrSet('mobile_options', $mobileOptions);
+    $this->getOrSet('custom_padding_selector', "%%order_class%% $selector");
+    return $this->type('custom_padding');
+  }
+
   public function basicOption(){
     return $this->getOrSet('option_category', 'basic_option');
   }
