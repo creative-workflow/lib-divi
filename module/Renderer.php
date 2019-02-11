@@ -4,6 +4,50 @@ namespace cw\divi\module;
 
 class Renderer{
 
+  public static function renderCustomMarginAndPadding($order_class, $fields, $atts, $content, $function_name){
+    $order_class = \ET_Builder_Element::add_module_order_class($order_class, $function_name );
+
+    $result = $resultDesktop = $resultTablet = $resultMobile = '';
+    foreach($fields as $id => $config){
+
+      if($config['type'] == 'custom_margin'){
+        $desktop = $mobile = $tablet = '';
+        $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_margin_selector']);
+
+        $desktop.="margin: ".self::renderMarginPaddingSetting($atts[$id]).";";
+        if(isset($atts['custom_margin_tablet']))
+          $tablet.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
+        if(isset($atts['custom_margin_phone']))
+          $mobile.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_phone']).";";
+
+        if($desktop) $resultDesktop.="$selector{ $desktop }";
+        if($tablet)  $resultTablet.="$selector{ $tablet }";
+        if($mobile)  $resultMobile.="$selector{ $mobile }";
+      }
+
+      if($config['type'] == 'custom_padding'){
+        $desktop = $mobile = $tablet = '';
+        $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_padding_selector']);
+
+        $desktop.="padding: ".self::renderMarginPaddingSetting($atts[$id]).";";
+        if(isset($atts['custom_padding_tablet']))
+          $tablet.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
+        if(isset($atts['custom_padding_phone']))
+          $mobile.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_phone']).";";
+
+        if($desktop) $resultDesktop.="$selector{ $desktop }";
+        if($tablet)  $resultTablet.="$selector{ $tablet }";
+        if($mobile)  $resultMobile.="$selector{ $mobile }";
+      }
+
+    }
+    if($resultDesktop) $result.="$resultDesktop";
+    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
+
+    return $result;
+  }
+
   public static function renderCustomCss($order_class, $advanced_fields, $atts, $content, $function_name){
     if(!isset($advanced_fields))
       return;
@@ -21,6 +65,9 @@ class Renderer{
 
     if(isset($advanced_fields['borders']))
       $result.=self::renderBorders($advanced_fields, $atts, $content, $order_class);
+
+    if(isset($advanced_fields['button']))
+      $result.=self::renderButtons($advanced_fields, $atts, $content, $order_class);
 
     return $result;
   }
@@ -41,6 +88,78 @@ class Renderer{
       return ;
 
     $desktop.="$style: {$atts[$key]}$unit;";
+  }
+
+
+  public static function renderButtons($advanced_fields, $atts, $content, $order_class){
+    $result = $resultDesktop = $resultTablet = $resultMobile = '';
+    foreach($advanced_fields['button'] as $name => $config){
+      $desktop = $mobile = $tablet = '';
+      if(!isset($config['css']))
+        continue;
+
+      $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['css']['main']);
+
+      $borderWidth = $name.'_border_width';
+      $borderColor = $name.'_border_color';
+      $borderStyle = $name.'_border_style';
+      $borderRadii = $name.'_border_radius';
+
+      $resultDesktop.= self::renderBorderStyle($selector, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+      $resultDesktop.= self::renderBorderRadii($selector, $atts[$borderRadii], '3');
+      self::renderFontSettingResponsive($atts, $name.'_alignment',     'text-align',     '', $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_text_size',      'font-size',      'px', $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', '', $desktop, $tablet, $mobile);
+
+      self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
+      if(isset($atts[$name.'_bg_color']))
+        $desktop.='background:'.$atts[$name.'_bg_color'].';';
+
+      if(isset($atts[$name.'_font'])){
+        $font_values = explode('|', $atts[$name.'_font']);
+        if ( isset( $font_values[1] ) ) {
+          $font_values[1] = 'on' === $font_values[1] ? '700' : $font_values[1];
+        }
+
+        $font_values          = array_map( 'trim', $font_values );
+        $font_name            = $font_values[0];
+        $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
+        $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
+        $is_font_uppercase    = isset( $font_values[3] ) && 'on' === $font_values[3] ? true : false;
+        $is_font_underline    = isset( $font_values[4] ) && 'on' === $font_values[4] ? true : false;
+        $is_font_small_caps   = isset( $font_values[5] ) && 'on' === $font_values[5] ? true : false;
+        $is_font_line_through = isset( $font_values[6] ) && 'on' === $font_values[6] ? true : false;
+        $font_line_color      = isset( $font_values[7] ) ? $font_values[7] : '';
+        $font_line_style      = isset( $font_values[8] ) ? $font_values[8] : '';
+
+        if($font_weight)          $desktop.="font-weight: $font_weight;";
+        if($is_font_italic)       $desktop.="font-style: italic;";
+        if($is_font_uppercase)    $desktop.="text-transform: uppercase;";
+        if($is_font_small_caps)   $desktop.="font-variant: small-caps;";
+        if($is_font_underline)    $desktop.="text-decoration: underline;";
+        if($is_font_line_through) $desktop.="text-decoration: line-through;";
+      }
+
+      if($desktop)
+        $resultDesktop.="$selector{ $desktop }";
+
+      if($tablet)
+        $resultTablet.="$selector{ $tablet }";
+
+      if($mobile)
+        $resultMobile.="$selector{ $mobile }";
+    }
+
+    if($resultDesktop)
+      $result.="$resultDesktop";
+
+    if($resultTablet)
+      $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+
+    if($resultMobile)
+      $result.="@media (max-width: 767px){ $resultMobile }";
+
+    return $result;
   }
 
   public static function renderCustomFonts($advanced_fields, $atts, $content, $order_class){
@@ -130,13 +249,6 @@ class Renderer{
   }
 
   public static function renderBorders($advanced_fields, $atts, $content, $order_class){
-    // return '';
-    // echo '<pre>';
-    // var_dump($advanced_fields['borders']);
-    // echo '!!!!!!!!!!!'."\n\n\n";
-    // var_dump($atts);
-    // die('huhu');
-
     if(!isset($advanced_fields['borders']))
       return '';
 
@@ -186,11 +298,23 @@ class Renderer{
 
     if(empty($width))
       $width = 'inherit';
+    else if(strpos($width, 'px') === false)
+      $width.='px';
 
     return "$selector{ $key: $width $style $color; }";
   }
 
-  public static function renderBorderRadii($selector, $radii){
+  public static function renderBorderRadii($selector, $radii, $default=''){
+    if(strpos($radii, '|') === false){
+      if(empty($radii)){
+        if(empty($default))
+          return '';
+        else
+          $radii = $default;
+      }
+
+      return "$selector{ border-radius: {$radii}px; }";
+    }
     $tmp = explode('|', $radii);
     array_shift($tmp);
     $tmp = implode(' ', $tmp);
@@ -230,7 +354,7 @@ class Renderer{
     $result = '';
     foreach($tmp as $value){
       if(empty($value))
-        $result.='inherit ';
+        $result.='0 ';
       else
         $result.=$value.' ';
     }
