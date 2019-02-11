@@ -68,10 +68,11 @@ class Field{
     ]);
   }
 
-  public function typeRange($min=1, $max=100, $step=1, $unit='%', $default=null){
+  public function typeRange($min=1, $max=100, $step=1, $unit='%', $default=null, $mobileOptions = false, $validateUnit = true){
     $this->whitelist();
     $this->type('range', $default);
-
+    $this->getOrSet('mobile_options', $mobileOptions);
+    $this->getOrSet('validate_unit', $validateUnit);
     return $this->getOrSet('range_settings', [
       'min'  => $min,
       'max'  => $max,
