@@ -7,7 +7,7 @@ class Field{
   public $id;
   private $module;
 
-  public function __construct(\ET_Builder_Module $module, $id){
+  public function __construct($module, $id){
     $this->module = $module;
     $this->id     = $id;
   }

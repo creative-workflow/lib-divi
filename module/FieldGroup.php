@@ -10,7 +10,7 @@ class FieldGroup{
   public $fields = [];
   private $module;
 
-  public function __construct(\ET_Builder_Module $module, $id, $name=''){
+  public function __construct($module, $id, $name=''){
     if($name === '')
       $name = $id;
 

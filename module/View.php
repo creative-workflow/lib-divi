@@ -9,7 +9,7 @@ class View{
   protected $parent;
   protected $moduleWrapper = null;
 
-  public function __construct(\cw\divi\module\Extension $parent, $moduleWrapper = null){
+  public function __construct($parent, $moduleWrapper = null){
     $this->parent        = $parent;
     $this->moduleWrapper = $moduleWrapper;
   }
