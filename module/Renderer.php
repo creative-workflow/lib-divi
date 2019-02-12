@@ -331,7 +331,8 @@ class Renderer{
       $desktop = $mobile = $tablet = '';
       $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
 
-      $desktop.="max-width: {$atts['max_width']};";
+      if(isset($atts['max_width']))
+        $desktop.="max-width: {$atts['max_width']};";
       if(isset($atts['max_width_tablet']))
         $tablet.="max-width: {$atts['max_width_tablet']};";
       if(isset($atts['max_width_phone']))
@@ -373,7 +374,8 @@ class Renderer{
       $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
 
       if($option == 'margin'){
-        $desktop.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin']).";";
+        if(isset($atts['custom_margin']))
+          $desktop.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin']).";";
         if(isset($atts['custom_margin_tablet']))
           $tablet.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_tablet']).";";
         if(isset($atts['custom_margin_phone']))
@@ -381,7 +383,8 @@ class Renderer{
       }
 
       if($option == 'padding'){
-        $desktop.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding']).";";
+        if(isset($atts['custom_padding']))
+          $desktop.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding']).";";
         if(isset($atts['custom_padding_tablet']))
           $tablet.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_tablet']).";";
         if(isset($atts['custom_padding_phone']))
@@ -398,5 +401,4 @@ class Renderer{
 
     return $result;
   }
-
 }
