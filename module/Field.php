@@ -127,15 +127,15 @@ class Field{
     return $this->type('color-alpha', $default);
   }
 
-  public function typeMargin($selector, $mobileOptions = true){
+  public function typeMargin($selector, $mobileOptions = true, $parentSelector = '%%order_class%%'){
     $this->getOrSet('mobile_options', $mobileOptions);
-    $this->getOrSet('custom_margin_selector', "%%order_class%% $selector");
+    $this->getOrSet('custom_margin_selector', "$parentSelector $selector");
     return $this->type('custom_margin');
   }
 
-  public function typePadding($selector='', $mobileOptions = true){
+  public function typePadding($selector='', $mobileOptions = true, $parentSelector = '%%order_class%%'){
     $this->getOrSet('mobile_options', $mobileOptions);
-    $this->getOrSet('custom_padding_selector', "%%order_class%% $selector");
+    $this->getOrSet('custom_padding_selector', "$parentSelector $selector");
     return $this->type('custom_padding');
   }
 
