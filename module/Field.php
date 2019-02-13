@@ -155,6 +155,10 @@ class Field{
     return $this->getOrSet('option_class', $value);
   }
 
+  public function optionId($value=null){
+    return $this->getOrSet('id', $value);
+  }
+
   public function addCssClass($value){
     $class = $this->getOrSet('option_class');
     return $this->getOrSet('option_class', "$class $value");
