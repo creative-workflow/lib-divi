@@ -93,6 +93,10 @@ class Field{
 
   public function typeMultipleCheckboxes($options, $default=null){
     $this->module->beforeInstanceAttributes(function($module, &$variables){
+      if(!isset($variables[$this->id])
+      || is_array($variables[$this->id]))
+        return ;
+
       $options = $this->getOrSet('options');
       $enabled = explode('|', $variables[$this->id]);
       $result  = [];
