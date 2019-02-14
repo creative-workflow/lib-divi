@@ -127,6 +127,11 @@ class Field{
     return $this;
   }
 
+  public function showIfNot($input = []){
+    $this->getOrSet('show_if_not', $input);
+    return $this;
+  }
+
   public function typeColor($default=''){
     return $this->type('color-alpha', $default);
   }
