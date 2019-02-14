@@ -120,7 +120,9 @@ class Extension2 extends \ET_Builder_Module {
     return $this->props[$name];
   }
 
-  public function instanceAttributes($onOffToBool = true){
+  const DIVI_SPECIAL_REPLACEMENT_KEYS   = ['&amp;shy;', '%91', '%93', '&#91;', '&#93;'];
+  const DIVI_SPECIAL_REPLACEMENT_VALUES = ['&shy;',     '[',   ']',   '[',     ']' ];
+  public function instanceAttributes($onOffToBool = true, $cleanupDiviSpecialChars = true){
     if(count($this->beforeInstanceAttributesCallback)){
       foreach($this->beforeInstanceAttributesCallback as $callback)
         call_user_func_array($callback, [$this, &$this->props]);
@@ -134,6 +136,17 @@ class Extension2 extends \ET_Builder_Module {
         if($value === 'off') $value = false;
       };
     }
+
+    if($cleanupDiviSpecialChars){
+      foreach($attributes as $key => &$value){
+        if(is_string($value))
+          $value = str_replace(
+                      self::DIVI_SPECIAL_REPLACEMENT_KEYS,
+                      self::DIVI_SPECIAL_REPLACEMENT_VALUES,
+                      $value);
+      }
+    }
+
     return $attributes;
   }
 
