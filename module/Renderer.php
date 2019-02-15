@@ -186,6 +186,7 @@ class Renderer{
           }
 
           $font_values          = array_map( 'trim', $font_values );
+          # TODO
           $font_name            = $font_values[0];
           $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
           $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
