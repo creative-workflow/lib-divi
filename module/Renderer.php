@@ -116,11 +116,11 @@ class Renderer{
         $desktop.='background:'.$atts[$name.'_bg_color'].';';
 
       if(!isset($atts[$name.'_font']))
-        $atts[$name.'_font'] = "||||||||";
+        $atts[$name.'_font'] = "|400|||||||";
 
       $font_values = explode('|', $atts[$name.'_font']);
       if ( isset( $font_values[1] ) ) {
-        $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
+        $font_values[1] = 'on' === $font_values[1] ? '400' : $font_values[1];
       }
 
       $font_values          = array_map( 'trim', $font_values );
@@ -182,13 +182,12 @@ class Renderer{
         self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
 
         if(!isset($atts[$name.'_font']))
-          $atts[$name.'_font'] = "||||||||";
+          $atts[$name.'_font'] = "|400|||||||";
 
         $font_values = explode('|', $atts[$name.'_font']);
         if ( isset( $font_values[1] ) ) {
-          $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
+          $font_values[1] = 'on' === $font_values[1] ? '400' : $font_values[1];
         }
-
         $font_values          = array_map( 'trim', $font_values );
         # TODO
         $font_name            = $font_values[0];
