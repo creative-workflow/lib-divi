@@ -115,30 +115,32 @@ class Renderer{
       if(isset($atts[$name.'_bg_color']))
         $desktop.='background:'.$atts[$name.'_bg_color'].';';
 
-      if(isset($atts[$name.'_font'])){
-        $font_values = explode('|', $atts[$name.'_font']);
-        if ( isset( $font_values[1] ) ) {
-          $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
-        }
+      if(!isset($atts[$name.'_font']))
+        $atts[$name.'_font'] = "||||||||";
 
-        $font_values          = array_map( 'trim', $font_values );
-        $font_name            = $font_values[0];
-        $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
-        $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
-        $is_font_uppercase    = isset( $font_values[3] ) && 'on' === $font_values[3] ? true : false;
-        $is_font_underline    = isset( $font_values[4] ) && 'on' === $font_values[4] ? true : false;
-        $is_font_small_caps   = isset( $font_values[5] ) && 'on' === $font_values[5] ? true : false;
-        $is_font_line_through = isset( $font_values[6] ) && 'on' === $font_values[6] ? true : false;
-        $font_line_color      = isset( $font_values[7] ) ? $font_values[7] : '';
-        $font_line_style      = isset( $font_values[8] ) ? $font_values[8] : '';
-
-        if($font_weight)          $desktop.="font-weight: $font_weight;";
-        if($is_font_italic)       $desktop.="font-style: italic;";
-        if($is_font_uppercase)    $desktop.="text-transform: uppercase;";
-        if($is_font_small_caps)   $desktop.="font-variant: small-caps;";
-        if($is_font_underline)    $desktop.="text-decoration: underline;";
-        if($is_font_line_through) $desktop.="text-decoration: line-through;";
+      $font_values = explode('|', $atts[$name.'_font']);
+      if ( isset( $font_values[1] ) ) {
+        $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
       }
+
+      $font_values          = array_map( 'trim', $font_values );
+      $font_name            = $font_values[0];
+      $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
+      $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
+      $is_font_uppercase    = isset( $font_values[3] ) && 'on' === $font_values[3] ? true : false;
+      $is_font_underline    = isset( $font_values[4] ) && 'on' === $font_values[4] ? true : false;
+      $is_font_small_caps   = isset( $font_values[5] ) && 'on' === $font_values[5] ? true : false;
+      $is_font_line_through = isset( $font_values[6] ) && 'on' === $font_values[6] ? true : false;
+      $font_line_color      = isset( $font_values[7] ) ? $font_values[7] : '';
+      $font_line_style      = isset( $font_values[8] ) ? $font_values[8] : '';
+
+      if($font_weight)          $desktop.="font-weight: $font_weight;";
+      if($is_font_italic)       $desktop.="font-style: italic;";
+      if($is_font_uppercase)    $desktop.="text-transform: uppercase;";
+      if($is_font_small_caps)   $desktop.="font-variant: small-caps;";
+      if($is_font_underline)    $desktop.="text-decoration: underline;";
+      if($is_font_line_through) $desktop.="text-decoration: line-through;";
+
 
       if($desktop)
         $resultDesktop.="$selector{ $desktop }";
@@ -168,7 +170,7 @@ class Renderer{
       if(!isset($config['css']))
         continue;
 
-      # echo '<pre>'; var_dump($atts); die();
+      // echo '<pre>'; var_dump($atts); die();
       foreach($config['css'] as $option => $selector){
         $desktop = $mobile = $tablet = '';
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
@@ -179,31 +181,32 @@ class Renderer{
 
         self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
 
-        if(isset($atts[$name.'_font'])){
-          $font_values = explode('|', $atts[$name.'_font']);
-          if ( isset( $font_values[1] ) ) {
-            $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
-          }
+        if(!isset($atts[$name.'_font']))
+          $atts[$name.'_font'] = "||||||||";
 
-          $font_values          = array_map( 'trim', $font_values );
-          # TODO
-          $font_name            = $font_values[0];
-          $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
-          $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
-          $is_font_uppercase    = isset( $font_values[3] ) && 'on' === $font_values[3] ? true : false;
-          $is_font_underline    = isset( $font_values[4] ) && 'on' === $font_values[4] ? true : false;
-          $is_font_small_caps   = isset( $font_values[5] ) && 'on' === $font_values[5] ? true : false;
-          $is_font_line_through = isset( $font_values[6] ) && 'on' === $font_values[6] ? true : false;
-          $font_line_color      = isset( $font_values[7] ) ? $font_values[7] : '';
-          $font_line_style      = isset( $font_values[8] ) ? $font_values[8] : '';
-
-          if($font_weight)          $desktop.="font-weight: $font_weight;";
-          if($is_font_italic)       $desktop.="font-style: italic;";
-          if($is_font_uppercase)    $desktop.="text-transform: uppercase;";
-          if($is_font_small_caps)   $desktop.="font-variant: small-caps;";
-          if($is_font_underline)    $desktop.="text-decoration: underline;";
-          if($is_font_line_through) $desktop.="text-decoration: line-through;";
+        $font_values = explode('|', $atts[$name.'_font']);
+        if ( isset( $font_values[1] ) ) {
+          $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
         }
+
+        $font_values          = array_map( 'trim', $font_values );
+        # TODO
+        $font_name            = $font_values[0];
+        $font_weight          = isset( $font_values[1] ) && '' !== $font_values[1] ? $font_values[1] : '';
+        $is_font_italic       = isset( $font_values[2] ) && 'on' === $font_values[2] ? true : false;
+        $is_font_uppercase    = isset( $font_values[3] ) && 'on' === $font_values[3] ? true : false;
+        $is_font_underline    = isset( $font_values[4] ) && 'on' === $font_values[4] ? true : false;
+        $is_font_small_caps   = isset( $font_values[5] ) && 'on' === $font_values[5] ? true : false;
+        $is_font_line_through = isset( $font_values[6] ) && 'on' === $font_values[6] ? true : false;
+        $font_line_color      = isset( $font_values[7] ) ? $font_values[7] : '';
+        $font_line_style      = isset( $font_values[8] ) ? $font_values[8] : '';
+
+        if($font_weight)          $desktop.="font-weight: $font_weight;";
+        if($is_font_italic)       $desktop.="font-style: italic;";
+        if($is_font_uppercase)    $desktop.="text-transform: uppercase;";
+        if($is_font_small_caps)   $desktop.="font-variant: small-caps;";
+        if($is_font_underline)    $desktop.="text-decoration: underline;";
+        if($is_font_line_through) $desktop.="text-decoration: line-through;";
 
         if($desktop)
           $resultDesktop.="$selector{ $desktop }";
