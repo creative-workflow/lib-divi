@@ -182,7 +182,7 @@ class Renderer{
         if(isset($atts[$name.'_font'])){
           $font_values = explode('|', $atts[$name.'_font']);
           if ( isset( $font_values[1] ) ) {
-            $font_values[1] = 'on' === $font_values[1] ? '700' : $font_values[1];
+            $font_values[1] = 'on' === $font_values[1] ? '500' : $font_values[1];
           }
 
           $font_values          = array_map( 'trim', $font_values );
