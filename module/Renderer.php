@@ -76,11 +76,18 @@ class Renderer{
     if(!isset($atts[$key]))
       return ;
 
-    $desktop.="$style: {$atts[$key]}$unit;";
-    if(isset($atts[$key.'_tablet']))
-      $tablet.="$style: {$atts[$key.'_tablet']}$unit;";
-    if(isset($atts[$key.'_phone']))
-      $mobile.="$style: {$atts[$key.'_phone']}$unit;";
+    if(isset($atts[$key])){
+      $tmp = strpos($atts[$key], 'px') !== false ? '' : $unit;
+      $desktop.="$style: {$atts[$key]}$tmp;";
+    }
+    if(isset($atts[$key.'_tablet'])){
+      $tmp = strpos($atts[$key.'_tablet'], 'px') !== false ? '' : $unit;
+      $tablet.="$style: {$atts[$key.'_tablet']}$tmp;";
+    }
+    if(isset($atts[$key.'_phone'])){
+      $tmp = strpos($atts[$key.'_phone'], 'px') !== false ? '' : $unit;
+      $mobile.="$style: {$atts[$key.'_phone']}$tmp;";
+    }
   }
 
   public static function renderFontSetting($atts, $key, $style, $unit, &$desktop){
@@ -110,6 +117,7 @@ class Renderer{
       self::renderFontSettingResponsive($atts, $name.'_alignment',     'text-align',     '', $desktop, $tablet, $mobile);
       self::renderFontSettingResponsive($atts, $name.'_text_size',      'font-size',      'px', $desktop, $tablet, $mobile);
       self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', '', $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_line_height', 'line-height', '', $desktop, $tablet, $mobile);
 
       self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
       if(isset($atts[$name.'_bg_color']))
@@ -166,18 +174,19 @@ class Renderer{
 
   public static function renderCustomFonts($advanced_fields, $atts, $content, $order_class){
     $result = $resultDesktop = $resultTablet = $resultMobile = '';
+    // echo '<pre>'; var_dump($atts); die();
     foreach($advanced_fields['fonts'] as $name => $config){
       if(!isset($config['css']))
         continue;
 
-      // echo '<pre>'; var_dump($atts); die();
       foreach($config['css'] as $option => $selector){
         $desktop = $mobile = $tablet = '';
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
 
         self::renderFontSettingResponsive($atts, $name.'_text_align',     'text-align',     '', $desktop, $tablet, $mobile);
         self::renderFontSettingResponsive($atts, $name.'_font_size',      'font-size',      'px', $desktop, $tablet, $mobile);
-        self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', '', $desktop, $tablet, $mobile);
+        self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', 'rem', $desktop, $tablet, $mobile);
+        self::renderFontSettingResponsive($atts, $name.'_line_height', 'line-height', '', $desktop, $tablet, $mobile);
 
         self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
 
