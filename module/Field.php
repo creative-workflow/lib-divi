@@ -102,7 +102,8 @@ class Field{
       $result  = [];
       $i = 0;
       foreach($options as $value => $name){
-        if(!empty($enabled[$i]))
+        if(!empty($enabled[$i])
+        && $enabled[$i] !== 'off')
           $result[] = $value;
         $i++;
       }
