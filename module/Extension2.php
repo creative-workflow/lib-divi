@@ -353,6 +353,10 @@ class Extension2 extends \ET_Builder_Module {
     return $this;
   }
 
+  public function getModuleClass(){
+    return '.'.trim(\ET_Builder_Element::add_module_order_class( $this->props['module_class'], '' ));
+  }
+
   public function shortcode_callback( $atts, $content = null, $function_name ) {
     $module_class            = $this->props['module_class'];
     $module_class            = \ET_Builder_Element::add_module_order_class( $module_class, $function_name );
