@@ -15,10 +15,11 @@ class Renderer{
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_margin_selector']);
 
         $desktop.="margin: ".self::renderMarginPaddingSetting($atts[$id]).";";
-        if(isset($atts['custom_margin_tablet']))
+        if(isset($atts[$id.'_tablet']))
           $tablet.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
-        if(isset($atts['custom_margin_phone']))
-          $mobile.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_phone']).";";
+        if(isset($atts[$id.'_phone'])
+        || isset($atts[$id.'_tablet']))
+          $mobile.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_phone'], $atts[$id.'_tablet']).";";
 
         if($desktop) $resultDesktop.="$selector{ $desktop }";
         if($tablet)  $resultTablet.="$selector{ $tablet }";
@@ -30,10 +31,11 @@ class Renderer{
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_padding_selector']);
 
         $desktop.="padding: ".self::renderMarginPaddingSetting($atts[$id]).";";
-        if(isset($atts['custom_padding_tablet']))
+        if(isset($atts[$id.'_tablet']))
           $tablet.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
-        if(isset($atts['custom_padding_phone']))
-          $mobile.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_phone']).";";
+        if(isset($atts[$id.'_phone'])
+        || isset($atts[$id.'_tablet']))
+          $mobile.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_phone'], $atts[$id.'_tablet']).";";
 
         if($desktop) $resultDesktop.="$selector{ $desktop }";
         if($tablet)  $resultTablet.="$selector{ $tablet }";
@@ -306,11 +308,12 @@ class Renderer{
       $style = "solid";
 
     if(empty($color))
-      $color = 'inherit';
+      $color = 'transparent';
 
     if(empty($width))
-      $width = 'inherit';
-    else if(strpos($width, 'px') === false)
+      $width = '2';
+
+    if(strpos($width, 'px') === false)
       $width.='px';
 
     return "$selector{ $key: $width $style $color; }";
@@ -362,10 +365,18 @@ class Renderer{
     return $result;
   }
 
-  public static function renderMarginPaddingSetting($input){
-    $tmp = explode('|', $input);
+  public static function renderMarginPaddingSetting($input, $optionalDefaultSettings=''){
+    $data = ['0','0','0','0'];
+    $tmp  = explode('|',$optionalDefaultSettings);
+    if(count($tmp) == 4)
+      foreach($tmp as $key=>$value) $data[$key]=$value;
+
+    $tmp  = explode('|',$input);
+    if(count($tmp) == 4)
+      foreach($tmp as $key=>$value) $data[$key]=$value;
+
     $result = '';
-    foreach($tmp as $value){
+    foreach($data as $value){
       if(empty($value))
         $result.='0 ';
       else
@@ -390,8 +401,9 @@ class Renderer{
           $desktop.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin']).";";
         if(isset($atts['custom_margin_tablet']))
           $tablet.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_tablet']).";";
-        if(isset($atts['custom_margin_phone']))
-          $mobile.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_phone']).";";
+        if(isset($atts['custom_margin_phone'])
+        || isset($atts['custom_margin_tablet']))
+          $mobile.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_phone'], $atts['custom_margin_tablet']).";";
       }
 
       if($option == 'padding'){
@@ -399,8 +411,9 @@ class Renderer{
           $desktop.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding']).";";
         if(isset($atts['custom_padding_tablet']))
           $tablet.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_tablet']).";";
-        if(isset($atts['custom_padding_phone']))
-          $mobile.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_phone']).";";
+        if(isset($atts['custom_padding_phone'])
+        || isset($atts['custom_padding_tablet']))
+          $mobile.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_phone'], $atts['custom_padding_tablet']).";";
       }
 
       if($desktop) $resultDesktop.="$selector{ $desktop }";
