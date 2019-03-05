@@ -235,9 +235,11 @@ class Extension2 extends \ET_Builder_Module {
     if(!is_array($this->advanced_fields))
       $this->advanced_fields = [];
 
+    $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
     $this->advanced_fields['max_width'] = [
       'css' => [
-        'module_alignment' => "$parentSelector $selector"
+        'use_max_width'        => true,
+        'module_alignment' => $selector
       ]
     ];
     return $this;
@@ -254,18 +256,20 @@ class Extension2 extends \ET_Builder_Module {
     if($paddingSelector === null)
       $paddingSelector = $marginSelector;
 
+    $paddingSelector = $this->mapParentSelectorToAllRules($paddingSelector, $parentSelector);
+    $marginSelector  = $this->mapParentSelectorToAllRules($marginSelector, $parentSelector);
     $this->advanced_fields['margin_padding'] = [
       'use_margin' => true,
       // 'custom_margin' =>
       'css' => [
-        'margin' => "$parentSelector $marginSelector",
-        'padding' => "$parentSelector $paddingSelector"
+        'margin' => $marginSelector,
+        'padding' => $paddingSelector
       ]
     ];
     return $this;
   }
 
-  public function addBorder($slug, $label, $borderSelector, $parentSelector = null){
+  public function addBorder($slug, $label, $selector, $parentSelector = null){
     $this->useBorder = true;
     if($parentSelector === null)
       $parentSelector = $this->main_css_element;
@@ -276,12 +280,14 @@ class Extension2 extends \ET_Builder_Module {
     if(!is_array($this->advanced_fields['borders']))
       $this->advanced_fields['borders'] = [];
 
+    $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
+
     $this->advanced_fields['borders'][$slug] = [
       'label_prefix' => $label,
       'css' => [
         'main'  => [
-          'border_radii'  => "$parentSelector $borderSelector",
-          'border_styles' => "$parentSelector $borderSelector",
+          'border_radii'  => $selector,
+          'border_styles' => $selector
         ]
       ]
     ];
@@ -299,17 +305,19 @@ class Extension2 extends \ET_Builder_Module {
     if(!isset($this->advanced_fields['box_shadow']))
       $this->advanced_fields['box_shadow'] = [];
 
+    $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
+
     $this->advanced_fields['box_shadow'][$slug] = [
       'label'    => $label,
       'css'      => [
-        'main' => "$parentSelector $selector"
+        'main' => $selector
       ],
     ];
     return $this;
   }
 
 
-  public function addFontSettings($slug, $label, $cssElement, $parentSelector = null, $onlyShow = null){
+  public function addFontSettings($slug, $label, $selector, $parentSelector = null, $onlyShow = null){
     $this->useFonts = true;
     if($parentSelector === null)
       $parentSelector = $this->main_css_element;
@@ -320,17 +328,27 @@ class Extension2 extends \ET_Builder_Module {
     if(!isset($this->advanced_fields['fonts']))
       $this->advanced_fields['fonts'] = [];
 
+    $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
+
     $this->advanced_fields['fonts'][$slug] = [
       'label'    => $label,
       'css'      => [
-        'main' => "$parentSelector $cssElement"
+        'main' => $selector
       ],
     ];
 
     return $this;
   }
 
-  public function addButton($slug, $label, $selector, $wrapperSelector=null, $parentSelector = null){
+  public function mapParentSelectorToAllRules($selector, $parentSelector){
+    $tmp = explode(',', $selector);
+    $tmp = array_map(function($el) use($parentSelector){
+      return "$parentSelector $el";
+    }, $tmp);
+    return implode(',', $tmp);
+  }
+
+  public function addButton($slug, $label, $selector, $parentSelector = null){
     if($parentSelector === null)
       $parentSelector = $this->main_css_element;
 
@@ -340,11 +358,13 @@ class Extension2 extends \ET_Builder_Module {
     if(!isset($this->advanced_fields['button']))
       $this->advanced_fields['button'] = [];
 
+    $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
+
     $this->advanced_fields['button'][$slug] = [
       'label' => $label,
       'css' => [
-        'main' => "$parentSelector $selector",
-        'alignment' => "$parentSelector $selector",
+        'main' => $selector,
+        'alignment' => $selector,
       ],
       'no_rel_attr' => true,
       'use_alignment' => true,
