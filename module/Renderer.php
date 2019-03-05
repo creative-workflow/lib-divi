@@ -79,7 +79,7 @@ class Renderer{
       return ;
 
     if(isset($atts[$key])){
-      $tmp = strpos($atts[$key], 'px') !== false ? '' : $unit;
+      $tmp = (strpos($atts[$key], 'px') !== false ? '' : $unit);
       $desktop.="$style: {$atts[$key]}$tmp;";
     }
     if(isset($atts[$key.'_tablet'])){
@@ -92,11 +92,14 @@ class Renderer{
     }
   }
 
-  public static function renderFontSetting($atts, $key, $style, $unit, &$desktop){
+  public static function renderFontSetting($atts, $key, $style, $unit=null, &$desktop){
     if(!isset($atts[$key]))
       return ;
 
-    $desktop.="$style: {$atts[$key]}$unit;";
+    if(strpos($atts[$key], $unit) === false)
+      $atts[$key].=$unit;
+
+    $desktop.="$style: {$atts[$key]};";
   }
 
 
@@ -104,7 +107,9 @@ class Renderer{
     $result = $resultDesktop = $resultTablet = $resultMobile = '';
     foreach($advanced_fields['button'] as $name => $config){
       $desktop = $mobile = $tablet = '';
-      if(!isset($config['css']))
+      if(!isset($config['css'])
+      || !isset($atts['custom_'.$name])
+      || $atts['custom_'.$name] != 'on')
         continue;
 
       $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['css']['main']);
@@ -113,6 +118,9 @@ class Renderer{
       $borderColor = $name.'_border_color';
       $borderStyle = $name.'_border_style';
       $borderRadii = $name.'_border_radius';
+
+      if(!isset($atts[$borderWidth]))
+        $atts[$borderWidth] = '2px';
 
       $resultDesktop.= self::renderBorderStyle($selector, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
       $resultDesktop.= self::renderBorderRadii($selector, $atts[$borderRadii], '3');
@@ -283,35 +291,43 @@ class Renderer{
         $borderStyle = 'border_style_all'.$suffix;
         $borderRadii = 'border_radii'.$suffix;
 
-        $result.= self::renderBorderStyle($selectorStyles, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
-        $result.= self::renderBorderRadii($selectorRadii, $atts[$borderRadii]);
+        if($borderWidth){
+          $result.= self::renderBorderStyle($selectorStyles, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+          $result.= self::renderBorderRadii($selectorRadii, $atts[$borderRadii]);
+        }
 
         foreach(['top', 'left', 'right', 'bottom'] as $partial){
-          $borderWidth = 'border_width_'.$partial.$suffix;
-          $borderColor = 'border_color_'.$partial.$suffix;
-          $borderStyle = 'border_style_'.$partial.$suffix;
+          $borderWidthPartial = 'border_width_'.$partial.$suffix;
+          $borderColorPartial = 'border_color_'.$partial.$suffix;
+          $borderStylePartial = 'border_style_'.$partial.$suffix;
 
-          $result.= self::renderBorderStyle($selectorStyles, 'border-'.$partial, $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+          $result.= self::renderBorderStyle($selectorStyles, 'border-'.$partial, $atts[$borderWidthPartial], $atts[$borderStylePartial], $atts[$borderColorPartial],
+                                                                                 $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
         }
       }
     }
     return $result;
   }
 
-  public static function renderBorderStyle($selector, $key, $width, $style, $color){
+  public static function renderBorderStyle($selector, $key, $width, $style, $color, $widthParent=null, $styleParent=null, $colorParent=null){
+    if(empty($width)) $width = $widthParent;
+    if(empty($style)) $style = $styleParent;
+    if(empty($color)) $color = $colorParent;
+
     if(empty($width)
     && empty($style)
     && empty($color))
+      return '';
+
+    if(empty($width))
       return '';
 
     if(empty($style))
       $style = "solid";
 
     if(empty($color))
-      $color = 'transparent';
+      $color = '#333333';
 
-    if(empty($width))
-      $width = '2';
 
     if(strpos($width, 'px') === false)
       $width.='px';
@@ -327,8 +343,10 @@ class Renderer{
         else
           $radii = $default;
       }
+      if(strpos($radii, 'px') === false)
+        $radii.='px';
 
-      return "$selector{ border-radius: {$radii}px; }";
+      return "$selector{ border-radius: {$radii}; }";
     }
     $tmp = explode('|', $radii);
     array_shift($tmp);
