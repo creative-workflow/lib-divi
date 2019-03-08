@@ -161,22 +161,29 @@ class Extension2 extends \ET_Builder_Module {
     return array_pop($tmp);
   }
 
+  protected function getGroup($id, $name=null){
+    return @$this->groups[$id];
+  }
+
   protected function addGroup($id, $name=null){
     $group = new \cw\divi\module\FieldGroup($this, $id, $name);
     $this->groups[$id] = $group;
     return $group;
   }
 
+  protected $infoGroup;
   protected function addInfoGroup($headline, $content = null){
     if($content === null){
       $content = $headline;
       $headline = '';
     }
 
-    $group = new \cw\divi\module\FieldGroup($this, 'info_box', '&#8520; '.$headline.'');
-    $this->groups['info_box'] = $group;
-    $group->addField('info_box')->typeInfo($content, $cssClass='info-box');
-    return $group;
+    if($this->infoGroup === null){
+      $this->infoGroup = new \cw\divi\module\FieldGroup($this, 'info_box', '&#8520; '.$headline.'');
+      $this->groups['info_box'] = $this->infoGroup;
+    }
+    $this->infoGroup->addField('info_box')->typeInfo($content, $cssClass='info-box');
+    return $this->infoGroup;
   }
 
   public function get_fields() {
