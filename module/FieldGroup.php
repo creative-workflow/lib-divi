@@ -19,6 +19,10 @@ class FieldGroup{
     $this->id     = $id;
   }
 
+  public function removeField($id){
+    unset($this->fields[$id]);
+  }
+
   public function addField($id){
     $this->fields[$id] = new \cw\divi\module\Field($this->module, $id);
     $this->fields[$id]->tabSlug($this->tab)
