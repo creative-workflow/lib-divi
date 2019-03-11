@@ -96,7 +96,7 @@ class Renderer{
     if(!isset($atts[$key]))
       return ;
 
-    if(strpos($atts[$key], $unit) === false)
+    if(!empty($unit) && strpos($atts[$key], $unit) === false)
       $atts[$key].=$unit;
 
     $desktop.="$style: {$atts[$key]};";
