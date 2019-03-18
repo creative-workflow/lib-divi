@@ -193,7 +193,7 @@ class Field{
 
   public function defaultValue($value){
     $this->module->fields_defaults[$this->id] = [$value];
-    $this->getOrSet('default', $default);
+    $this->getOrSet('default', $value);
     return $this;
   }
 

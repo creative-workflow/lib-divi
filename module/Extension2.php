@@ -284,7 +284,8 @@ class Extension2 extends \ET_Builder_Module {
     if(!is_array($this->advanced_fields))
       $this->advanced_fields = [];
 
-    if(!is_array($this->advanced_fields['borders']))
+    if(!isset($this->advanced_fields['borders'])
+    || !is_array($this->advanced_fields['borders']))
       $this->advanced_fields['borders'] = [];
 
     $selector = $this->mapParentSelectorToAllRules($selector, $parentSelector);
