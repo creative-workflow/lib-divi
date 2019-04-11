@@ -134,6 +134,7 @@ class Field{
   }
 
   public function typeColor($default=''){
+    $this->getOrSet('custom_color', true);
     return $this->type('color-alpha', $default);
   }
 
