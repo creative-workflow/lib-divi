@@ -343,6 +343,9 @@ class Extension2 extends \ET_Builder_Module {
       'css'      => [
         'main' => $selector
       ],
+      // 'font_size' => array(
+      //   'default'      => '30px',
+      // ),
     ];
 
     return $this;
