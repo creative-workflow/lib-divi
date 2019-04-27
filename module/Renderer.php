@@ -44,7 +44,7 @@ class Renderer{
 
     }
     if($resultDesktop) $result.="$resultDesktop";
-    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultTablet)  $result.="@media (max-width: 980px){ $resultTablet }";
     if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
 
     return $result;
@@ -124,10 +124,10 @@ class Renderer{
 
       $resultDesktop.= self::renderBorderStyle($selector, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
       $resultDesktop.= self::renderBorderRadii($selector, $atts[$borderRadii], '3');
-      self::renderFontSettingResponsive($atts, $name.'_alignment',     'text-align',     '', $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_alignment',     'text-align',      ''  , $desktop, $tablet, $mobile);
       self::renderFontSettingResponsive($atts, $name.'_text_size',      'font-size',      'px', $desktop, $tablet, $mobile);
-      self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', '', $desktop, $tablet, $mobile);
-      self::renderFontSettingResponsive($atts, $name.'_line_height', 'line-height', '', $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', ''  , $desktop, $tablet, $mobile);
+      self::renderFontSettingResponsive($atts, $name.'_line_height', 'line-height',       ''  , $desktop, $tablet, $mobile);
 
       self::renderFontSetting($atts, $name.'_text_color', 'color', '', $desktop);
       if(isset($atts[$name.'_bg_color']))
@@ -174,7 +174,7 @@ class Renderer{
       $result.="$resultDesktop";
 
     if($resultTablet)
-      $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+      $result.="@media (max-width: 980px){ $resultTablet }";
 
     if($resultMobile)
       $result.="@media (max-width: 767px){ $resultMobile }";
@@ -193,8 +193,8 @@ class Renderer{
         $desktop = $mobile = $tablet = '';
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
 
-        self::renderFontSettingResponsive($atts, $name.'_text_align',     'text-align',     '', $desktop, $tablet, $mobile);
         self::renderFontSettingResponsive($atts, $name.'_font_size',      'font-size',      'px', $desktop, $tablet, $mobile);
+        self::renderFontSettingResponsive($atts, $name.'_text_align',     'text-align',     '', $desktop, $tablet, $mobile);
         self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', 'rem', $desktop, $tablet, $mobile);
         self::renderFontSettingResponsive($atts, $name.'_line_height', 'line-height', '', $desktop, $tablet, $mobile);
 
@@ -241,7 +241,7 @@ class Renderer{
       $result.="$resultDesktop";
 
     if($resultTablet)
-      $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+      $result.="@media (max-width: 980px){ $resultTablet }";
 
     if($resultMobile)
       $result.="@media (max-width: 767px){ $resultMobile }";
@@ -377,7 +377,7 @@ class Renderer{
     }
 
     if($resultDesktop) $result.="$resultDesktop";
-    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultTablet)  $result.="@media (max-width: 980px){ $resultTablet }";
     if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
 
     return $result;
@@ -439,7 +439,7 @@ class Renderer{
       if($mobile)  $resultMobile.="$selector{ $mobile }";
     }
     if($resultDesktop) $result.="$resultDesktop";
-    if($resultTablet)  $result.="@media (min-width: 768px) and (max-width: 980px){ $resultTablet }";
+    if($resultTablet)  $result.="@media (max-width: 980px){ $resultTablet }";
     if($resultMobile)  $result.="@media (max-width: 767px){ $resultMobile }";
 
     return $result;
