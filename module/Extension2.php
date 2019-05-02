@@ -302,6 +302,39 @@ class Extension2 extends \ET_Builder_Module {
     return $this;
   }
 
+  public function getBorder($slug){
+    if(!isset($this->advanced_fields['borders'])
+    || !isset($this->advanced_fields['borders'][$slug]))
+      return null;
+
+    if($slug == 'default')
+      $suffix = '';
+    else
+      $suffix = '_'.$slug;
+
+    $borderWidthKey = 'border_width_all'.$suffix;
+
+    $atts = $this->instanceAttributes();
+
+    $result = new \stdClass;
+
+    if($atts[$borderWidthKey]){
+      $val = str_replace('px', '', $atts[$borderWidthKey]);
+      $result->topWidth = $result->leftWidth = $result->rightWidth = $result->bottomWidth = $val;
+    }
+
+    foreach(['top', 'left', 'right', 'bottom'] as $partial){
+      $borderWidthKey = 'border_width_'.$partial.$suffix;
+      if(!empty($result->{$partial.'Width'})
+      && empty($atts[$borderWidthKey]))
+        continue;
+
+      $result->{$partial.'Width'} = str_replace('px', '', $atts[$borderWidthKey]);
+    }
+
+    return $result;
+  }
+
   public function addBoxShadow($slug, $label, $selector, $parentSelector = null){
     $this->useBoxShadow = true;
     if($parentSelector === null)
