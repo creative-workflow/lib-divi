@@ -361,6 +361,9 @@ class Renderer{
 
     $result = $resultDesktop = $resultTablet = $resultMobile = '';
     foreach($advanced_fields['max_width']['css'] as $option => $selector){
+      if($option == 'use_max_width')
+        continue;
+
       $desktop = $mobile = $tablet = '';
       $selector = str_replace('%%order_class%%', '.'.trim($order_class), $selector);
 
