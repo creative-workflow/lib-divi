@@ -61,7 +61,7 @@ class Extension2 extends \ET_Builder_Module {
       \ET_Builder_Module::_add_font_fields();
   }
   public $useMaxWidth=false;
-  public function _add_max_width_fields(){
+  protected function _add_max_width_fields(){
     if($this->useMaxWidth)
       \ET_Builder_Module::_add_max_width_fields();
   }
