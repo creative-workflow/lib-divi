@@ -61,7 +61,7 @@ class Extension2 extends \ET_Builder_Module {
       \ET_Builder_Module::_add_font_fields();
   }
   public $useMaxWidth=false;
-  protected function _add_max_width_fields(){
+  public function _add_max_width_fields(){
     if($this->useMaxWidth)
       \ET_Builder_Module::_add_max_width_fields();
   }
@@ -80,7 +80,7 @@ class Extension2 extends \ET_Builder_Module {
     $this->slug             = 'et_pb_'.$diviModuleSlug;
     $this->name             = $this->moduleDisplayName();
 
-    $this->vb_support       = true;
+    $this->vb_support       = 'on';
     $this->fullwidth        = $fullWidth;
 
     return $this;
