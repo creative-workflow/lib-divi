@@ -80,7 +80,7 @@ class Extension2 extends \ET_Builder_Module {
     $this->slug             = 'et_pb_'.$diviModuleSlug;
     $this->name             = $this->moduleDisplayName();
 
-    $this->vb_support       = 'on';
+    $this->vb_support       = 'off';
     $this->fullwidth        = $fullWidth;
 
     return $this;
