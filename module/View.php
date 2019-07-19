@@ -43,7 +43,10 @@ class View{
 
       $html = \cw\php\view\Html::getInstance();
 
-      include $view;
+      if(WP_DEBUG)
+        require $view;
+      else
+        include $view;
 
     return ob_get_clean();
   }
