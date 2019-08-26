@@ -71,6 +71,12 @@ class Extension2 extends \ET_Builder_Module {
       \ET_Builder_Module::_add_margin_padding_fields();
   }
 
+  public $useSizingFields=false;
+  protected function _add_sizing_fields(){
+    if($this->useSizingFields)
+      \ET_Builder_Module::_add_sizing_fields();
+  }
+
   public function init($mainCssClass, $diviModuleSlug = null, $fullWidth = false) {
     if($diviModuleSlug === null)
       $diviModuleSlug = $mainCssClass;
