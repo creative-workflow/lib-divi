@@ -47,6 +47,12 @@ class Field{
                 ->addCssClass($cssClass);
   }
 
+  public function typeSeperator($cssClass='hidden-field-sepertor'){
+    $this->whitelist();
+    return $this->typeText('', true)
+                ->addCssClass($cssClass);
+  }
+
   public function typeDatePicker(){
     $this->whitelist();
     return $this->type('date_picker');

@@ -32,6 +32,10 @@ class FieldGroup{
     return $this->fields[$id];
   }
 
+  public function addSeperator(){
+    return $this->addField('__hidden__'.mt_rand())->typeSeperator();
+  }
+
   public function priority($value){
     $this->priority = $value;
     return $this;
