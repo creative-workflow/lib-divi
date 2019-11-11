@@ -126,8 +126,8 @@ class Extension2 extends \ET_Builder_Module {
     return $this->props[$name];
   }
 
-  const DIVI_SPECIAL_REPLACEMENT_KEYS   = ['&amp;shy;', '%91', '%93', '&#91;', '&#93;'];
-  const DIVI_SPECIAL_REPLACEMENT_VALUES = ['&shy;',     '[',   ']',   '[',     ']' ];
+  const DIVI_SPECIAL_REPLACEMENT_KEYS   = ['&amp;', '&amp;shy;', '%91', '%93', '&#91;', '&#93;'];
+  const DIVI_SPECIAL_REPLACEMENT_VALUES = ['&', '&shy;',     '[',   ']',   '[',     ']' ];
   public function instanceAttributes($onOffToBool = true, $cleanupDiviSpecialChars = true){
     if(count($this->beforeInstanceAttributesCallback)){
       foreach($this->beforeInstanceAttributesCallback as $callback)
