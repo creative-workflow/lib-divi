@@ -14,7 +14,7 @@ class Renderer{
         $desktop = $mobile = $tablet = '';
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_margin_selector']);
 
-        $desktop.="margin: ".self::renderMarginPaddingSetting($atts[$id]).";";
+        $desktop.="margin: ".self::renderMarginPaddingSetting(isset($atts[$id]) ? $atts[$id] : '').";";
         if(isset($atts[$id.'_tablet']))
           $tablet.="margin: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
         if(isset($atts[$id.'_phone'])
@@ -30,7 +30,7 @@ class Renderer{
         $desktop = $mobile = $tablet = '';
         $selector = str_replace('%%order_class%%', '.'.trim($order_class), $config['custom_padding_selector']);
 
-        $desktop.="padding: ".self::renderMarginPaddingSetting($atts[$id]).";";
+        $desktop.="padding: ".self::renderMarginPaddingSetting(isset($atts[$id]) ? $atts[$id] : '').";";
         if(isset($atts[$id.'_tablet']))
           $tablet.="padding: ".self::renderMarginPaddingSetting($atts[$id.'_tablet']).";";
         if(isset($atts[$id.'_phone'])
@@ -122,8 +122,13 @@ class Renderer{
       if(!isset($atts[$borderWidth]))
         $atts[$borderWidth] = '2px';
 
-      $resultDesktop.= self::renderBorderStyle($selector, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
-      $resultDesktop.= self::renderBorderRadii($selector, $atts[$borderRadii], '3');
+      $resultDesktop.= self::renderBorderStyle($selector,
+                                               'border',
+                                               isset($atts[$borderWidth]) ? $atts[$borderWidth] : null,
+                                               isset($atts[$borderStyle]) ? $atts[$borderStyle] : null,
+                                               isset($atts[$borderColor]) ? $atts[$borderColor] : null);
+
+      $resultDesktop.= self::renderBorderRadii($selector, isset($atts[$borderRadii]) ? $atts[$borderRadii] : '', '3');
       self::renderFontSettingResponsive($atts, $name.'_alignment',     'text-align',      ''  , $desktop, $tablet, $mobile);
       self::renderFontSettingResponsive($atts, $name.'_text_size',      'font-size',      'px', $desktop, $tablet, $mobile);
       self::renderFontSettingResponsive($atts, $name.'_letter_spacing', 'letter-spacing', ''  , $desktop, $tablet, $mobile);
@@ -292,8 +297,13 @@ class Renderer{
         $borderRadii = 'border_radii'.$suffix;
 
         if($borderWidth){
-          $result.= self::renderBorderStyle($selectorStyles, 'border', $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
-          $result.= self::renderBorderRadii($selectorRadii, $atts[$borderRadii]);
+          $result.= self::renderBorderStyle($selectorStyles,
+                                            'border',
+                                            isset($atts[$borderWidth]) ? $atts[$borderWidth] : null,
+                                            isset($atts[$borderStyle]) ? $atts[$borderStyle] : null,
+                                            isset($atts[$borderColor]) ? $atts[$borderColor] : null
+                                           );
+          $result.= self::renderBorderRadii($selectorRadii, isset($atts[$borderRadii]) ? $atts[$borderRadii] : '');
         }
 
         foreach(['top', 'left', 'right', 'bottom'] as $partial){
@@ -301,8 +311,14 @@ class Renderer{
           $borderColorPartial = 'border_color_'.$partial.$suffix;
           $borderStylePartial = 'border_style_'.$partial.$suffix;
 
-          $result.= self::renderBorderStyle($selectorStyles, 'border-'.$partial, $atts[$borderWidthPartial], $atts[$borderStylePartial], $atts[$borderColorPartial],
-                                                                                 $atts[$borderWidth], $atts[$borderStyle], $atts[$borderColor]);
+          $result.= self::renderBorderStyle($selectorStyles,
+                                            'border-'.$partial,
+                                            isset($atts[$borderWidthPartial]) ? $atts[$borderWidthPartial] : null,
+                                            isset($atts[$borderStylePartial]) ? $atts[$borderStylePartial] : null,
+                                            isset($atts[$borderColorPartial]) ? $atts[$borderColorPartial] : null,
+                                            isset($atts[$borderWidth]) ? $atts[$borderWidth] : null,
+                                            isset($atts[$borderStyle]) ? $atts[$borderStyle] : null,
+                                            isset($atts[$borderColor]) ? $atts[$borderColor] : null);
         }
       }
     }
@@ -424,7 +440,7 @@ class Renderer{
           $tablet.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_tablet']).";";
         if(isset($atts['custom_margin_phone'])
         || isset($atts['custom_margin_tablet']))
-          $mobile.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_phone'], $atts['custom_margin_tablet']).";";
+          $mobile.="margin: ".self::renderMarginPaddingSetting($atts['custom_margin_phone'], isset($atts['custom_margin_tablet']) ? $atts['custom_margin_tablet'] : '').";";
       }
 
       if($option == 'padding'){
@@ -434,7 +450,7 @@ class Renderer{
           $tablet.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_tablet']).";";
         if(isset($atts['custom_padding_phone'])
         || isset($atts['custom_padding_tablet']))
-          $mobile.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_phone'], $atts['custom_padding_tablet']).";";
+          $mobile.="padding: ".self::renderMarginPaddingSetting($atts['custom_padding_phone'], isset($atts['custom_padding_tablet']) ? $atts['custom_padding_tablet'] : '').";";
       }
 
       if($desktop) $resultDesktop.="$selector{ $desktop }";
