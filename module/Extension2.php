@@ -171,6 +171,10 @@ class Extension2 extends \ET_Builder_Module {
     return @$this->groups[$id];
   }
 
+  protected function removeGroup($id){
+    unset($this->groups[$id]);
+  }
+
   protected function addGroup($id, $name=null){
     $group = new \cw\divi\module\FieldGroup($this, $id, $name);
     $this->groups[$id] = $group;
