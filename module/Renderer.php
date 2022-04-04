@@ -348,7 +348,12 @@ class Renderer{
     if(strpos($width, 'px') === false)
       $width.='px';
 
-    return "$selector{ $key: $width $style $color; }";
+
+    $return = "$selector{ $key: $width $style $color; }";
+    if(strpos($selector,':hover') === false)
+      return $return;
+
+    return "@media(hover: hover) and (pointer: fine){ $return }";
   }
 
   public static function renderBorderRadii($selector, $radii, $default=''){
@@ -367,7 +372,12 @@ class Renderer{
     $tmp = explode('|', $radii);
     array_shift($tmp);
     $tmp = implode(' ', $tmp);
-    return "$selector{ border-radius: $tmp; }";
+
+    $return = "$selector{ border-radius: $tmp; }";
+    if(strpos($selector,':hover') === false)
+      return $return;
+
+    return "@media(hover: hover) and (pointer: fine){ $return }";
   }
 
   public static function renderMaxWidth($advanced_fields, $atts, $content, $order_class){
